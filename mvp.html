@@ -1,0 +1,5198 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KHEDMA nearby - منصة وظائف</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Lexend:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background: #f2f6fb;
+            --surface: #ffffff;
+            --surface-muted: #f6faff;
+            --surface-elevated: #f8fbff;
+            --primary: #0f4c81;
+            --primary-strong: #0a355a;
+            --primary-soft: #e7f1fc;
+            --accent-sky: #7ab8ff;
+            --accent-mint: #5cc7a5;
+            --text: #14263f;
+            --text-muted: #5f728d;
+            --border: #d6e2ef;
+            --ring: rgba(76, 134, 224, 0.35);
+            --urgent: #b42318;
+            --urgent-bg: #fdecea;
+            --today: #b45309;
+            --today-bg: #fff3e3;
+            --regular: #0f766e;
+            --regular-bg: #e8f8f3;
+            --shadow-soft: 0 10px 28px rgba(15, 76, 129, 0.09);
+            --shadow-card: 0 7px 20px rgba(15, 76, 129, 0.08);
+            --shadow-strong: 0 18px 36px rgba(12, 55, 95, 0.16);
+            --radius-xl: 24px;
+            --radius-lg: 18px;
+            --radius-md: 14px;
+            --radius-sm: 10px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            line-height: 1.5;
+            color: var(--text);
+            background:
+                radial-gradient(circle at 10% -6%, #d8ebff 0%, transparent 44%),
+                radial-gradient(circle at 88% 3%, #dff8f3 0%, transparent 40%),
+                var(--background);
+            padding-bottom: 72px;
+            min-height: 100vh;
+        }
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        button,
+        select,
+        input,
+        a {
+            font-family: inherit;
+        }
+
+        .app-shell {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 20px clamp(14px, 2.8vw, 28px) 96px;
+        }
+
+        .header {
+            position: sticky;
+            top: 12px;
+            z-index: 120;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 18px;
+            padding: 18px clamp(16px, 2vw, 24px);
+            margin-bottom: 16px;
+            background: linear-gradient(120deg, rgba(255, 255, 255, 0.97), rgba(247, 252, 255, 0.92));
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-soft);
+            backdrop-filter: blur(14px);
+        }
+
+        .header-eyebrow {
+            font-family: 'Lexend', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.09em;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .header h1 {
+            font-size: clamp(21px, 3vw, 30px);
+            line-height: 1.25;
+            margin-bottom: 6px;
+        }
+
+        .header-sub {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .header-metrics {
+            min-width: min(360px, 100%);
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .metric-card {
+            text-align: center;
+            background: linear-gradient(155deg, #ffffff 0%, #f5f9ff 100%);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 10px 8px;
+            transition: transform 0.24s ease, box-shadow 0.24s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 20px rgba(15, 76, 129, 0.12);
+        }
+
+        .metric-card strong {
+            display: block;
+            font-size: 21px;
+            font-weight: 800;
+            color: var(--primary-strong);
+            line-height: 1.2;
+            margin-bottom: 2px;
+        }
+
+        .metric-card span {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .control-panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 18px;
+            overflow: hidden;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scroll-snap-type: x mandatory;
+            background: linear-gradient(180deg, #ffffff, #fbfdff);
+        }
+
+        .tab {
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            border-radius: 999px;
+            padding: 9px 18px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.22s ease;
+            scroll-snap-align: start;
+            position: relative;
+        }
+
+        .tab:hover {
+            border-color: #b1cae5;
+            background: #f5faff;
+            transform: translateY(-1px);
+        }
+
+        .tab.active {
+            background: linear-gradient(130deg, var(--primary), #1764a6);
+            color: #fff;
+            border-color: var(--primary);
+            box-shadow: 0 8px 18px rgba(15, 76, 129, 0.26);
+        }
+
+        .search-section {
+            padding: 14px;
+            display: grid;
+            gap: 10px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--surface-muted);
+            padding: 10px 12px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+        }
+
+        .search-icon {
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            color: var(--text);
+            font-size: 15px;
+            outline: none;
+        }
+
+        .filters-row {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .filter-select,
+        .clear-filters-btn {
+            height: 42px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 13px;
+            background: var(--surface);
+            color: var(--text);
+            padding: 0 10px;
+            transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .clear-filters-btn {
+            background: var(--primary-soft);
+            color: var(--primary-strong);
+            border-color: #bdd2e9;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .clear-filters-btn:hover {
+            background: #dcecff;
+            transform: translateY(-1px);
+        }
+
+        .view-section {
+            animation: fadeIn 0.34s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .explorer-layout {
+            display: grid;
+            grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
+            gap: 16px;
+            align-items: start;
+        }
+
+        .map-section {
+            position: sticky;
+            top: 152px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-card);
+            padding: 14px;
+        }
+
+        .map-head h3 {
+            font-size: 17px;
+            margin-bottom: 2px;
+        }
+
+        .map-head p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .map-container {
+            position: relative;
+            height: 250px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            background: linear-gradient(145deg, #ebf6ff 0%, #edf8f6 100%);
+        }
+
+        .map-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(15, 76, 129, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(15, 76, 129, 0.08) 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.35;
+            pointer-events: none;
+        }
+
+        .map-marker {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 0 3px rgba(15, 76, 129, 0.14);
+            background: var(--regular);
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.2s ease;
+            z-index: 2;
+        }
+
+        .map-marker::after {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border-radius: 50%;
+            border: 1px solid rgba(15, 76, 129, 0.24);
+            opacity: 0;
+            animation: markerPulse 2.4s ease-out infinite;
+        }
+
+        .map-marker:hover {
+            transform: translate(-50%, -50%) scale(1.16);
+            box-shadow: 0 0 0 4px rgba(15, 76, 129, 0.2);
+        }
+
+        .map-marker.urgent {
+            background: var(--urgent);
+        }
+
+        .map-marker.today {
+            background: var(--today);
+        }
+
+        @keyframes markerPulse {
+            0% {
+                transform: scale(0.65);
+                opacity: 0.8;
+            }
+            65% {
+                transform: scale(1.25);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1.25);
+                opacity: 0;
+            }
+        }
+
+        .map-label {
+            position: absolute;
+            right: 12px;
+            bottom: 10px;
+            z-index: 1;
+            font-size: 12px;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.88);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 4px 10px;
+        }
+
+        .map-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 11px;
+        }
+
+        .legend-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--regular);
+            box-shadow: 0 0 0 2px rgba(15, 76, 129, 0.12);
+        }
+
+        .legend-dot.urgent {
+            background: var(--urgent);
+        }
+
+        .legend-dot.today {
+            background: var(--today);
+        }
+
+        .jobs-column {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 0 2px;
+        }
+
+        .section-title h2 {
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .results-count {
+            font-size: 13px;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            background: var(--surface);
+            padding: 5px 12px;
+            white-space: nowrap;
+        }
+
+        .jobs-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .job-card {
+            position: relative;
+            background: linear-gradient(165deg, #ffffff 0%, var(--surface-elevated) 100%);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-card);
+            padding: 16px;
+            cursor: pointer;
+            transition: transform 0.26s ease, box-shadow 0.26s ease, border-color 0.24s ease;
+            overflow: hidden;
+            animation: cardLiftIn 0.4s ease both;
+            animation-delay: calc(var(--card-index, 0) * 40ms);
+        }
+
+        .job-card::before {
+            content: '';
+            position: absolute;
+            inset-block: 10px;
+            inset-inline-start: 0;
+            width: 5px;
+            border-radius: 8px;
+            background: var(--regular);
+        }
+
+        .job-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top left, rgba(122, 184, 255, 0.18), transparent 40%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+
+        .job-card.urgent::before {
+            background: var(--urgent);
+        }
+
+        .job-card.today::before {
+            background: var(--today);
+        }
+
+        .job-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-strong);
+            border-color: #bed3e8;
+        }
+
+        .job-card:hover::after {
+            opacity: 1;
+        }
+
+        .job-card:focus-visible {
+            outline: 3px solid var(--ring);
+            outline-offset: 1px;
+        }
+
+        @keyframes cardLiftIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px) scale(0.99);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .job-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .job-title {
+            font-size: 18px;
+            font-weight: 800;
+            line-height: 1.25;
+            margin-bottom: 4px;
+        }
+
+        .job-company {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .job-salary {
+            padding: 7px 10px;
+            border-radius: 11px;
+            border: 1px solid #bfd5ec;
+            background: linear-gradient(120deg, var(--primary-soft), #f0f7ff);
+            color: var(--primary-strong);
+            font-size: 13px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .job-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .meta-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: #f9fcff;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .job-footer {
+            margin-top: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px 11px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .badge.urgent {
+            background: var(--urgent-bg);
+            color: var(--urgent);
+        }
+
+        .badge.today {
+            background: var(--today-bg);
+            color: var(--today);
+        }
+
+        .badge.regular {
+            background: var(--regular-bg);
+            color: var(--regular);
+        }
+
+        .job-action {
+            color: var(--primary);
+            font-size: 13px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: transform 0.2s ease;
+        }
+
+        .job-card:hover .job-action {
+            transform: translateX(-2px);
+        }
+
+        .my-job-card {
+            cursor: default;
+        }
+
+        .my-job-card::before {
+            background: var(--primary);
+        }
+
+        .my-job-card:hover {
+            transform: none;
+            box-shadow: var(--shadow-card);
+        }
+
+        .post-job-btn {
+            border: 1px solid var(--primary);
+            background: var(--primary);
+            color: #fff;
+            border-radius: 10px;
+            padding: 9px 14px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .post-job-btn:hover {
+            background: var(--primary-strong);
+            border-color: var(--primary-strong);
+        }
+
+        .profiles-section {
+            margin-top: 12px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 12px;
+        }
+
+        .profile-card {
+            background: linear-gradient(150deg, #ffffff, #f8fcff);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 14px;
+            box-shadow: var(--shadow-card);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 26px rgba(15, 76, 129, 0.14);
+        }
+
+        .profile-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: linear-gradient(130deg, #0f4c81, #0f766e);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .profile-info {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 15px;
+            font-weight: 800;
+            margin-bottom: 2px;
+        }
+
+        .profile-skills {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .profile-rating {
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--text-muted);
+        }
+
+        .profile-rating .stars {
+            color: #d97706;
+            letter-spacing: 0.04em;
+        }
+
+        .contact-profile-btn {
+            border: 1px solid #9edbc0;
+            background: #ebf9f1;
+            color: #0f766e;
+            border-radius: 10px;
+            padding: 8px 11px;
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .contact-profile-btn:hover {
+            background: #dcf5e8;
+        }
+
+        .empty-state {
+            text-align: center;
+            background: var(--surface);
+            border: 1px dashed #c4d5e7;
+            border-radius: var(--radius-lg);
+            padding: 34px 16px;
+            color: var(--text-muted);
+        }
+
+        .empty-state-icon {
+            width: 54px;
+            height: 54px;
+            margin: 0 auto 10px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: var(--surface-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .empty-state p {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .ghost-btn {
+            border: 1px solid var(--border);
+            background: #fff;
+            color: var(--primary);
+            border-radius: 10px;
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .ghost-btn:hover {
+            background: #f7fbff;
+        }
+
+        .modal-overlay {
+            display: flex;
+            position: fixed;
+            inset: 0;
+            background: rgba(8, 21, 36, 0.56);
+            z-index: 1000;
+            padding: 18px;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            backdrop-filter: blur(2px);
+            transition: opacity 0.24s ease, visibility 0.24s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .modal {
+            width: min(620px, 100%);
+            max-height: 90vh;
+            overflow-y: auto;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            box-shadow: 0 20px 42px rgba(10, 35, 60, 0.32);
+            padding: 22px;
+            transform: translateY(18px) scale(0.985);
+            opacity: 0;
+            transition: transform 0.24s ease, opacity 0.24s ease;
+            outline: none;
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 800;
+            line-height: 1.3;
+        }
+
+        .modal-close {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: var(--surface-muted);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 18px;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .modal-company {
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .modal-salary {
+            display: inline-flex;
+            padding: 8px 12px;
+            border-radius: 11px;
+            border: 1px solid #bfd5ec;
+            background: var(--primary-soft);
+            color: var(--primary-strong);
+            font-size: 19px;
+            font-weight: 800;
+            margin-bottom: 14px;
+        }
+
+        .modal-highlights {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .location-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: var(--surface-muted);
+            border: 1px solid var(--border);
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .modal-section {
+            margin-bottom: 14px;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: #fbfdff;
+        }
+
+        .modal-section h4 {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .modal-section p {
+            font-size: 14px;
+            color: var(--text);
+        }
+
+        .whatsapp-btn {
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 13px;
+            border-radius: 12px;
+            background: #25d366;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 800;
+            text-decoration: none;
+            border: none;
+        }
+
+        .whatsapp-btn:hover {
+            background: #18b65b;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .tab:focus-visible,
+        .post-job-btn:focus-visible,
+        .clear-filters-btn:focus-visible,
+        .ghost-btn:focus-visible,
+        .role-btn:focus-visible,
+        .apply-btn:focus-visible,
+        .small-btn:focus-visible,
+        .input-field:focus-visible,
+        .filter-select:focus-visible,
+        .modal-close:focus-visible,
+        .whatsapp-btn:focus-visible,
+        .contact-profile-btn:focus-visible {
+            outline: 3px solid var(--ring);
+            outline-offset: 1px;
+        }
+
+        .search-box:focus-within {
+            border-color: #a8c5e6;
+            box-shadow: 0 0 0 3px rgba(76, 134, 224, 0.18);
+        }
+
+        .app-view {
+            min-height: 68vh;
+        }
+
+        .landing-view.app-view {
+            min-height: auto;
+        }
+
+        .landing-page {
+            margin-top: 14px;
+            display: grid;
+            gap: clamp(18px, 2.7vw, 30px);
+        }
+
+        .landing-block,
+        .landing-footer {
+            position: relative;
+            width: 100%;
+            background: linear-gradient(150deg, #ffffff 0%, #f4f9ff 100%);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            box-shadow: var(--shadow-soft);
+            padding: clamp(20px, 3.5vw, 36px);
+            overflow: hidden;
+        }
+
+        .landing-block::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 88% 4%, rgba(122, 184, 255, 0.2), transparent 36%);
+            pointer-events: none;
+        }
+
+        .landing-heading {
+            font-size: clamp(25px, 4.2vw, 35px);
+            margin-bottom: 6px;
+            color: var(--primary-strong);
+            line-height: 1.25;
+        }
+
+        .landing-intro {
+            font-size: 15px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .hero-section {
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) minmax(270px, 0.8fr);
+            gap: clamp(16px, 3vw, 34px);
+            align-items: center;
+        }
+
+        .hero-copy {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            border: 1px solid #c8daf0;
+            background: #f0f7ff;
+            color: var(--primary);
+            font-family: "Lexend", sans-serif;
+            font-size: 12px;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .hero-kicker::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-mint);
+            box-shadow: 0 0 0 4px rgba(92, 199, 165, 0.2);
+        }
+
+        .hero-title {
+            font-size: clamp(31px, 5.3vw, 52px);
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+            color: var(--primary-strong);
+            margin-bottom: 12px;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(18px, 3vw, 24px);
+            color: #244a73;
+            margin-bottom: 24px;
+            font-weight: 600;
+        }
+
+        .role-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            max-width: 420px;
+        }
+
+        .role-btn {
+            min-height: 56px;
+            border-radius: 14px;
+            border: 1px solid var(--primary);
+            background: linear-gradient(130deg, var(--primary), #1668ad);
+            color: #fff;
+            font-size: 19px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .role-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 24px rgba(15, 76, 129, 0.22);
+        }
+
+        .role-btn.role-worker {
+            border-color: #168466;
+            background: linear-gradient(130deg, #0f766e, #24a47f);
+        }
+
+        .hero-visual {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 360px;
+        }
+
+        .visual-glow {
+            position: absolute;
+            inset: 16% 8%;
+            border-radius: 28px;
+            background: radial-gradient(circle at center, rgba(122, 184, 255, 0.4), rgba(92, 199, 165, 0.17) 50%, transparent 70%);
+            filter: blur(12px);
+            pointer-events: none;
+        }
+
+        .phone-mockup {
+            position: relative;
+            width: min(280px, 92%);
+            border-radius: 28px;
+            background: linear-gradient(155deg, #0f4c81, #0f6d94);
+            box-shadow: 0 24px 40px rgba(12, 55, 95, 0.28);
+            padding: 14px 10px;
+            color: #fff;
+        }
+
+        .phone-notch {
+            width: 76px;
+            height: 8px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.35);
+            margin: 0 auto 10px;
+        }
+
+        .phone-screen {
+            background: #fff;
+            border-radius: 20px;
+            padding: 14px;
+            color: var(--text);
+        }
+
+        .phone-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .phone-brand {
+            font-family: "Lexend", sans-serif;
+            font-size: 13px;
+            letter-spacing: 0.03em;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .phone-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #25d366;
+        }
+
+        .phone-job {
+            border: 1px solid #d7e6f5;
+            border-radius: 12px;
+            padding: 10px;
+            margin-bottom: 8px;
+            background: linear-gradient(120deg, #f7fbff, #f3fcfa);
+        }
+
+        .phone-job strong {
+            display: block;
+            font-size: 13px;
+            color: var(--primary-strong);
+            margin-bottom: 4px;
+        }
+
+        .phone-job span {
+            display: block;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .phone-pill {
+            margin-top: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 999px;
+            background: #eaf8f2;
+            color: #0f766e;
+            border: 1px solid #bee9d8;
+            padding: 5px 12px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .section-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .section-grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .landing-card-item {
+            position: relative;
+            z-index: 1;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 16px;
+            box-shadow: var(--shadow-card);
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--primary-soft);
+            border: 1px solid #bfd5ec;
+            color: var(--primary);
+            font-family: "Lexend", sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .icon-badge {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            background: linear-gradient(140deg, #edf6ff, #e9f8f4);
+            border: 1px solid #c8ddf1;
+            color: var(--primary);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 11px;
+        }
+
+        .icon-badge svg {
+            width: 22px;
+            height: 22px;
+            stroke: currentColor;
+            stroke-width: 1.8;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .landing-card-title {
+            font-size: 18px;
+            margin-bottom: 4px;
+            color: var(--primary-strong);
+            line-height: 1.3;
+        }
+
+        .landing-card-copy {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .stats-section {
+            background: linear-gradient(140deg, #0f4c81 0%, #1769a1 56%, #0f766e 100%);
+            border-color: rgba(24, 103, 154, 0.6);
+            box-shadow: 0 18px 34px rgba(10, 52, 86, 0.28);
+        }
+
+        .stats-section::after {
+            background: radial-gradient(circle at 8% 16%, rgba(255, 255, 255, 0.2), transparent 34%);
+        }
+
+        .stats-heading,
+        .stats-subline {
+            color: #fff;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stats-subline {
+            opacity: 0.88;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.26);
+            border-radius: 18px;
+            padding: 16px;
+            backdrop-filter: blur(4px);
+        }
+
+        .stat-number {
+            display: block;
+            font-family: "Lexend", sans-serif;
+            font-size: clamp(30px, 4vw, 44px);
+            line-height: 1;
+            margin-bottom: 6px;
+            color: #fff;
+            letter-spacing: 0.01em;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.88);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .testimonial {
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: #fff;
+            padding: 16px;
+            box-shadow: var(--shadow-card);
+        }
+
+        .testimonial blockquote {
+            font-size: 15px;
+            color: #1a385f;
+            font-weight: 600;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+
+        .testimonial-author {
+            font-size: 13px;
+            color: var(--text-muted);
+            border-top: 1px dashed #c8d8ea;
+            padding-top: 10px;
+        }
+
+        .landing-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .landing-footer-copy {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .landing-footer-links {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .landing-footer-links a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .landing-footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        .reveal-section {
+            opacity: 0;
+            transform: translateY(26px);
+            transition: opacity 0.68s ease, transform 0.68s ease;
+            transition-delay: var(--reveal-delay, 0ms);
+        }
+
+        .reveal-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .auth-card {
+            width: min(740px, 100%);
+            margin: 22px auto 0;
+            background: linear-gradient(150deg, #ffffff 0%, #f4f9ff 100%);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            box-shadow: var(--shadow-soft);
+            padding: clamp(22px, 4vw, 36px);
+        }
+
+        .auth-title {
+            font-size: clamp(22px, 4vw, 30px);
+            margin-bottom: 8px;
+        }
+
+        .auth-sub {
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+
+        .form-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .job-form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .field-group {
+            display: grid;
+            gap: 6px;
+        }
+
+        .field-group label {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .input-field {
+            width: 100%;
+            min-height: 44px;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            background: #fff;
+            color: var(--text);
+            padding: 10px 12px;
+            font-size: 14px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #9fc1e7;
+            box-shadow: 0 0 0 3px rgba(76, 134, 224, 0.2);
+        }
+
+        .skills-select {
+            min-height: 120px;
+        }
+
+        .auth-actions {
+            display: flex;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .dashboard-actions {
+            margin-bottom: 12px;
+        }
+
+        .inline-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .job-form {
+            margin: 0 12px 14px;
+            background: #f8fcff;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 12px;
+        }
+
+        .span-2 {
+            grid-column: 1 / -1;
+        }
+
+        .muted-copy {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .apply-btn,
+        .small-btn {
+            border: 1px solid var(--primary);
+            background: var(--primary);
+            color: #fff;
+            border-radius: 10px;
+            padding: 7px 12px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease;
+        }
+
+        .apply-btn:hover,
+        .small-btn:hover {
+            background: var(--primary-strong);
+            border-color: var(--primary-strong);
+        }
+
+        .apply-btn[disabled] {
+            border-color: #c5d5e6;
+            background: #edf3fa;
+            color: #6b7c93;
+            cursor: not-allowed;
+        }
+
+        .small-btn.reject {
+            background: #b42318;
+            border-color: #b42318;
+        }
+
+        .small-btn.reject:hover {
+            background: #8f1d13;
+            border-color: #8f1d13;
+        }
+
+        .small-btn[disabled] {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .applicants-panel {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed #c1d4e8;
+            display: grid;
+            gap: 10px;
+        }
+
+        .applicant-item {
+            background: #f8fcff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px;
+        }
+
+        .applicant-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .applicant-name {
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .applicant-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .applicant-actions {
+            margin-top: 8px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .status-pill.pending {
+            background: var(--today-bg);
+            color: var(--today);
+        }
+
+        .status-pill.accepted {
+            background: var(--regular-bg);
+            color: var(--regular);
+        }
+
+        .status-pill.rejected {
+            background: var(--urgent-bg);
+            color: var(--urgent);
+        }
+
+        .section-spacer {
+            margin-top: 10px;
+        }
+
+        @media (max-width: 1024px) {
+            .header {
+                position: static;
+                flex-direction: column;
+            }
+
+            .header-metrics {
+                width: 100%;
+                min-width: 0;
+            }
+
+            .map-section {
+                top: 20px;
+            }
+
+            .job-form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-section {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-visual {
+                min-height: 0;
+            }
+
+            .section-grid-4,
+            .testimonials-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 900px) {
+            .explorer-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .map-section {
+                position: static;
+            }
+
+            .filters-row {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .role-buttons {
+                grid-template-columns: 1fr;
+                max-width: 100%;
+            }
+
+            .section-grid-3,
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding-bottom: 56px;
+            }
+
+            .app-shell {
+                padding: 12px 12px 74px;
+            }
+
+            .header {
+                margin-bottom: 12px;
+                border-radius: 18px;
+                padding: 14px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .header-metrics {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .metric-card:last-child {
+                grid-column: 1 / -1;
+            }
+
+            .tabs {
+                padding: 10px;
+                gap: 6px;
+            }
+
+            .tab {
+                padding: 8px 14px;
+                font-size: 13px;
+                min-height: 40px;
+            }
+
+            .search-section {
+                padding: 12px;
+            }
+
+            .filters-row {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .map-container {
+                height: 220px;
+            }
+
+            .job-card {
+                padding: 14px;
+            }
+
+            .landing-block,
+            .landing-footer {
+                border-radius: 22px;
+            }
+
+            .auth-card {
+                margin-top: 12px;
+                border-radius: 22px;
+            }
+
+            .hero-subtitle {
+                margin-bottom: 18px;
+            }
+
+            .job-top {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .job-title {
+                font-size: 17px;
+            }
+
+            .job-meta {
+                margin-top: 10px;
+            }
+
+            .job-footer {
+                margin-top: 10px;
+            }
+
+            .profiles-section {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-overlay {
+                align-items: flex-end;
+                padding: 8px 0 0;
+            }
+
+            .modal {
+                width: 100%;
+                max-height: 88vh;
+                border-radius: 22px 22px 0 0;
+                border-bottom: none;
+                padding: 18px;
+            }
+
+            .landing-footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-metrics {
+                grid-template-columns: 1fr;
+            }
+
+            .metric-card:last-child {
+                grid-column: auto;
+            }
+
+            .section-title h2 {
+                font-size: 17px;
+            }
+
+            .results-count {
+                font-size: 12px;
+            }
+
+            .job-footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .job-salary {
+                font-size: 12px;
+            }
+
+            .profile-card {
+                align-items: flex-start;
+                flex-wrap: wrap;
+            }
+
+            .contact-profile-btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .modal {
+                max-height: 92vh;
+            }
+
+            .section-grid-4,
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-title {
+                font-size: 30px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation: none !important;
+                transition: none !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        /* Trust & Safety Styles */
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-inline-start: 6px;
+        }
+
+        .verified-badge.verified {
+            background: linear-gradient(135deg, #0f766e, #14b8a6);
+            color: #fff;
+        }
+
+        .verified-badge.verified svg {
+            width: 12px;
+            height: 12px;
+            fill: currentColor;
+        }
+
+        .verification-tooltip {
+            position: relative;
+            cursor: help;
+        }
+
+        .verification-tooltip .tooltip-content {
+            position: absolute;
+            bottom: 100%;
+            right: 0;
+            margin-bottom: 6px;
+            background: var(--text);
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(4px);
+            transition: all 0.2s ease;
+            z-index: 100;
+        }
+
+        .verification-tooltip:hover .tooltip-content {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .report-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 12px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .report-btn:hover {
+            background: var(--urgent-bg);
+            color: var(--urgent);
+        }
+
+        .report-btn svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .rating-display {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .star {
+            color: #d97706;
+            font-size: 14px;
+        }
+
+        .star.empty {
+            color: var(--border);
+        }
+
+        .star.half {
+            position: relative;
+        }
+
+        .rating-number {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-inline-start: 4px;
+        }
+
+        .rating-input {
+            display: inline-flex;
+            gap: 2px;
+        }
+
+        .rating-input .star-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--border);
+            padding: 0 2px;
+            transition: transform 0.15s ease;
+        }
+
+        .rating-input .star-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .rating-input .star-btn.active {
+            color: #d97706;
+        }
+
+        .rating-submit-btn {
+            margin-inline-start: 8px;
+            padding: 4px 12px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .rating-submit-btn:hover {
+            background: var(--primary-strong);
+        }
+
+        .safety-tips-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0f766e, #14b8a6);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(15, 118, 110, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            z-index: 90;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .safety-tips-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(15, 118, 110, 0.45);
+        }
+
+        .safety-modal {
+            max-width: 500px;
+        }
+
+        .safety-tips-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .safety-tips-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .safety-tips-list li:last-child {
+            border-bottom: none;
+        }
+
+        .safety-tip-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary-soft), #e8f8f3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 18px;
+        }
+
+        .safety-tip-text h4 {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--primary-strong);
+            margin-bottom: 3px;
+        }
+
+        .safety-tip-text p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Onboarding Styles */
+        .onboarding-overlay {
+            display: flex;
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #0f4c81 0%, #0a355a 50%, #0f766e 100%);
+            z-index: 2000;
+            padding: 20px;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .onboarding-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .onboarding-container {
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .onboarding-slide {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+            animation: slideIn 0.4s ease;
+        }
+
+        .onboarding-slide.active {
+            display: flex;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .onboarding-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            margin-bottom: 24px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .onboarding-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .onboarding-subtitle {
+            font-size: 16px;
+            opacity: 0.85;
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .onboarding-progress {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .onboarding-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .onboarding-dot.active {
+            background: #fff;
+            width: 28px;
+            border-radius: 5px;
+        }
+
+        .onboarding-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 320px;
+            margin-top: auto;
+        }
+
+        .onboarding-skip {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 8px 16px;
+            transition: color 0.2s ease;
+        }
+
+        .onboarding-skip:hover {
+            color: #fff;
+        }
+
+        .onboarding-next {
+            background: #fff;
+            color: #0f4c81;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 32px;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .onboarding-next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Role Selection Modal */
+        .role-selection-overlay {
+            display: flex;
+            position: fixed;
+            inset: 0;
+            background: rgba(8, 21, 36, 0.7);
+            z-index: 1500;
+            padding: 20px;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            backdrop-filter: blur(4px);
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .role-selection-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .role-selection-modal {
+            width: 100%;
+            max-width: 480px;
+            background: var(--surface);
+            border-radius: 24px;
+            padding: 32px 24px;
+            text-align: center;
+            transform: translateY(20px) scale(0.95);
+            transition: transform 0.3s ease;
+            box-shadow: 0 24px 48px rgba(10, 35, 60, 0.35);
+        }
+
+        .role-selection-overlay.active .role-selection-modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .role-selection-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary-strong);
+            margin-bottom: 8px;
+        }
+
+        .role-selection-sub {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .role-options {
+            display: grid;
+            gap: 14px;
+        }
+
+        .role-option {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 18px 20px;
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            background: #fff;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-align: start;
+        }
+
+        .role-option:hover {
+            border-color: var(--primary);
+            background: var(--primary-soft);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(15, 76, 129, 0.15);
+        }
+
+        .role-option-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .role-option-icon.employer {
+            background: linear-gradient(135deg, var(--primary), #1764a6);
+        }
+
+        .role-option-icon.worker {
+            background: linear-gradient(135deg, #0f766e, #24a47f);
+        }
+
+        .role-option-text h3 {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .role-option-text p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* Profile Completion Modal */
+        .profile-modal-overlay {
+            display: flex;
+            position: fixed;
+            inset: 0;
+            background: rgba(8, 21, 36, 0.7);
+            z-index: 1600;
+            padding: 20px;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            backdrop-filter: blur(4px);
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .profile-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .profile-modal {
+            width: 100%;
+            max-width: 480px;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: var(--surface);
+            border-radius: 24px;
+            padding: 28px 24px;
+            transform: translateY(20px) scale(0.95);
+            transition: transform 0.3s ease;
+            box-shadow: 0 24px 48px rgba(10, 35, 60, 0.35);
+        }
+
+        .profile-modal-overlay.active .profile-modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .profile-modal-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .profile-modal-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), #0f766e);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 0 auto 16px;
+        }
+
+        .profile-modal-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--primary-strong);
+            margin-bottom: 6px;
+        }
+
+        .profile-modal-sub {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .profile-form {
+            display: grid;
+            gap: 16px;
+        }
+
+        .profile-field {
+            text-align: start;
+        }
+
+        .profile-field label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .profile-field input,
+        .profile-field select {
+            width: 100%;
+            min-height: 48px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: #fff;
+            color: var(--text);
+            padding: 12px 14px;
+            font-size: 15px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .profile-field input:focus,
+        .profile-field select:focus {
+            outline: none;
+            border-color: #9fc1e7;
+            box-shadow: 0 0 0 3px rgba(76, 134, 224, 0.2);
+        }
+
+        .profile-submit {
+            margin-top: 8px;
+        }
+
+        .profile-submit button {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            background: linear-gradient(130deg, var(--primary), #1764a6);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 800;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .profile-submit button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(15, 76, 129, 0.25);
+        }
+
+        /* Skills Selection */
+        .skills-modal-overlay {
+            display: flex;
+            position: fixed;
+            inset: 0;
+            background: rgba(8, 21, 36, 0.7);
+            z-index: 1700;
+            padding: 20px;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            backdrop-filter: blur(4px);
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .skills-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .skills-modal {
+            width: 100%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
+            background: var(--surface);
+            border-radius: 24px;
+            padding: 28px 24px;
+            transform: translateY(20px) scale(0.95);
+            transition: transform 0.3s ease;
+            box-shadow: 0 24px 48px rgba(10, 35, 60, 0.35);
+        }
+
+        .skills-modal-overlay.active .skills-modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .skills-modal-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .skills-modal-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--primary-strong);
+            margin-bottom: 6px;
+        }
+
+        .skills-modal-sub {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .skill-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: #fff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .skill-checkbox:hover {
+            border-color: var(--primary);
+            background: var(--primary-soft);
+        }
+
+        .skill-checkbox.selected {
+            border-color: var(--primary);
+            background: var(--primary-soft);
+        }
+
+        .skill-checkbox input {
+            display: none;
+        }
+
+        .skill-check {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .skill-checkbox.selected .skill-check {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+        }
+
+        .skill-check svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+            stroke-width: 3;
+            fill: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .skill-checkbox.selected .skill-check svg {
+            opacity: 1;
+        }
+
+        .skill-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .skills-selected-count {
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .skills-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .skills-skip {
+            flex: 1;
+            padding: 14px;
+            border-radius: 12px;
+            background: #f5f5f5;
+            color: var(--text-muted);
+            font-size: 15px;
+            font-weight: 700;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .skills-skip:hover {
+            background: #ebebeb;
+        }
+
+        .skills-done {
+            flex: 2;
+            padding: 14px;
+            border-radius: 12px;
+            background: linear-gradient(130deg, var(--primary), #1764a6);
+            color: #fff;
+            font-size: 15px;
+            font-weight: 800;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .skills-done:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(15, 76, 129, 0.25);
+        }
+
+        .skills-done:disabled {
+            background: #c5d5e6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        @media (max-width: 640px) {
+            .onboarding-title {
+                font-size: 24px;
+            }
+            
+            .onboarding-subtitle {
+                font-size: 15px;
+            }
+            
+            .onboarding-icon {
+                width: 80px;
+                height: 80px;
+                font-size: 38px;
+            }
+            
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .report-modal .modal-section {
+            margin-bottom: 16px;
+        }
+
+        .report-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .report-option {
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: #fff;
+            cursor: pointer;
+            text-align: start;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            transition: all 0.2s ease;
+        }
+
+        .report-option:hover {
+            border-color: var(--primary);
+            background: var(--primary-soft);
+        }
+
+        .report-option.selected {
+            border-color: var(--urgent);
+            background: var(--urgent-bg);
+            color: var(--urgent);
+        }
+
+        .report-textarea {
+            width: 100%;
+            min-height: 100px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            margin-top: 12px;
+        }
+
+        .report-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(76, 134, 224, 0.15);
+        }
+
+        .report-submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--urgent);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 12px;
+        }
+
+        .report-submit-btn:hover {
+            background: #8f1d13;
+        }
+
+        .report-submit-btn:disabled {
+            background: #c5d5e6;
+            cursor: not-allowed;
+        }
+
+        .job-footer-with-rating {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .job-card-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .profile-card .profile-verification {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 2px;
+        }
+
+        .profile-verification .verified-badge {
+            padding: 2px 6px;
+            font-size: 10px;
+        }
+
+        .modal-profile-view {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .modal-profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(130deg, #0f4c81, #0f766e);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 800;
+            margin: 0 auto 16px;
+        }
+
+        .modal-profile-name {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .modal-profile-meta {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .modal-profile-rating {
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 640px) {
+            .safety-tips-btn {
+                bottom: 70px;
+                left: 12px;
+                width: 44px;
+                height: 44px;
+                font-size: 18px;
+            }
+
+            .report-options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-shell">
+        <section id="landingView" class="view-section app-view landing-view">
+            <div class="landing-page">
+                <section class="landing-block hero-section reveal-section is-visible">
+                    <div class="hero-copy">
+                        <p class="hero-kicker">KHEDMA</p>
+                        <h1 class="hero-title">KHEDMA - منصة وظائف وعمال في المغرب</h1>
+                        <p class="hero-subtitle">اعثر على أفضل العمال أو الوظائف في مدينتك خلال دقائق</p>
+                        <div class="role-buttons">
+                            <button type="button" class="role-btn role-employer" id="chooseEmployerBtn">صاحب عمل</button>
+                            <button type="button" class="role-btn role-worker" id="chooseWorkerBtn">عامل</button>
+                        </div>
+                    </div>
+                    <div class="hero-visual" aria-hidden="true">
+                        <div class="visual-glow"></div>
+                        <div class="phone-mockup">
+                            <div class="phone-notch"></div>
+                            <div class="phone-screen">
+                                <div class="phone-top">
+                                    <span class="phone-brand">KHEDMA APP</span>
+                                    <span class="phone-dot"></span>
+                                </div>
+                                <div class="phone-job">
+                                    <strong>نجار محترف</strong>
+                                    <span>الدار البيضاء • 4500 درهم</span>
+                                </div>
+                                <div class="phone-job">
+                                    <strong>عامل بناء</strong>
+                                    <span>الرباط • اليوم</span>
+                                </div>
+                                <span class="phone-pill">تواصل مباشر عبر WhatsApp</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="landing-block reveal-section" style="--reveal-delay: 40ms;">
+                    <h2 class="landing-heading">كيف يعمل</h2>
+                    <p class="landing-intro">ابدأ في أقل من دقيقة، سواء كنت صاحب عمل تبحث عن عمال أو عامل يبحث عن فرصة.</p>
+                    <div class="section-grid-3">
+                        <article class="landing-card-item">
+                            <span class="step-number">1</span>
+                            <span class="icon-badge" aria-hidden="true">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"></path>
+                                    <path d="M4 20a8 8 0 0 1 16 0"></path>
+                                </svg>
+                            </span>
+                            <h3 class="landing-card-title">أنشئ حسابك</h3>
+                            <p class="landing-card-copy">سجّل في ثوانٍ وابدأ مباشرة بدون خطوات معقدة.</p>
+                        </article>
+                        <article class="landing-card-item">
+                            <span class="step-number">2</span>
+                            <span class="icon-badge" aria-hidden="true">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M3 7h18"></path>
+                                    <path d="M6 12h12"></path>
+                                    <path d="M8 17h8"></path>
+                                </svg>
+                            </span>
+                            <h3 class="landing-card-title">ابحث أو PUBLISH</h3>
+                            <p class="landing-card-copy">انشر وظائفك أو ابحث عن عمل مناسب حسب المدينة والمهارة.</p>
+                        </article>
+                        <article class="landing-card-item">
+                            <span class="step-number">3</span>
+                            <span class="icon-badge" aria-hidden="true">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M21 12a8.8 8.8 0 0 1-1.2 4.5L21 21l-4.8-1.2A9 9 0 1 1 21 12Z"></path>
+                                    <path d="M9 11h6"></path>
+                                    <path d="M9 15h4"></path>
+                                </svg>
+                            </span>
+                            <h3 class="landing-card-title">تواصل ووظف</h3>
+                            <p class="landing-card-copy">تواصل مباشرة عبر WhatsApp مع الطرف المناسب وابدأ العمل فوراً.</p>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="landing-block reveal-section" style="--reveal-delay: 80ms;">
+                    <h2 class="landing-heading">مميزات</h2>
+                    <p class="landing-intro">كل ما تحتاجه للتوظيف السريع أو إيجاد فرصة حقيقية في المغرب.</p>
+                    <div class="section-grid-4">
+                        <article class="landing-card-item">
+                            <span class="icon-badge" aria-hidden="true">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="m4 12 4 4 12-12"></path>
+                                </svg>
+                            </span>
+                            <h3 class="landing-card-title">مطابقة سريعة</h3>
+                            <p class="landing-card-copy">ربط سريع بين أصحاب العمل والعمال خلال وقت قصير.</p>
+                        </article>
+                        <article class="landing-card-item">
+                            <span class="icon-badge" aria-hidden="true">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M20 5H4v14h16V5Z"></path>
+                                    <path d="M4 8h16"></path>
+                                    <path d="M8 12h3"></path>
+                                </svg>
+                            </span>
+                            <h3 class="landing-card-title">WhatsApp مباشر</h3>
+                            <p class="landing-card-copy">بدون وسيط، تواصل مباشر وسريع بين الطرفين.</p>
+                        </article>
+                        <article class="landing-card-item">
+                            <span class="icon-badge" aria-hidden="true">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 3 4 7v6c0 5 3.5 7.8 8 8 4.5-.2 8-3 8-8V7l-8-4Z"></path>
+                                    <path d="m9.5 12 1.8 1.8 3.2-3.2"></path>
+                                </svg>
+                            </span>
+                            <h3 class="landing-card-title">وظائف موثقة</h3>
+                            <p class="landing-card-copy">فرص حقيقية من أصحاب عمل موثوقين وجودة أعلى للإعلانات.</p>
+                        </article>
+                        <article class="landing-card-item">
+                            <span class="icon-badge" aria-hidden="true">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M3 12h18"></path>
+                                    <path d="M12 3v18"></path>
+                                </svg>
+                            </span>
+                            <h3 class="landing-card-title">مجاني للاستخدام</h3>
+                            <p class="landing-card-copy">بدون رسوم على العمال، سجل وابدأ التقديم فوراً.</p>
+                        </article>
+                    </div>
+                </section>
+
+                <section id="landingStatsSection" class="landing-block stats-section reveal-section" style="--reveal-delay: 120ms;">
+                    <h2 class="landing-heading stats-heading">أرقام</h2>
+                    <p class="stats-subline">نمو متواصل في الفرص والعمال عبر مدن المغرب.</p>
+                    <div class="stats-grid">
+                        <article class="stat-item">
+                            <strong class="stat-number" data-target="500" data-suffix="+">0</strong>
+                            <span class="stat-label">وظيفة</span>
+                        </article>
+                        <article class="stat-item">
+                            <strong class="stat-number" data-target="200" data-suffix="+">0</strong>
+                            <span class="stat-label">عامل</span>
+                        </article>
+                        <article class="stat-item">
+                            <strong class="stat-number" data-target="50" data-suffix="+">0</strong>
+                            <span class="stat-label">مدينة</span>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="landing-block reveal-section" style="--reveal-delay: 160ms;">
+                    <h2 class="landing-heading">اخبار عنا</h2>
+                    <p class="landing-intro">آراء من مستخدمين جرّبوا المنصة في مدن مختلفة.</p>
+                    <div class="testimonials-grid">
+                        <article class="testimonial">
+                            <blockquote>"مبارك من الدار البيضاء: منصة سهلة وسريعة، لقيت عمال مناسبين في نفس اليوم."</blockquote>
+                            <p class="testimonial-author">مبارك - صاحب ورشة نجارة</p>
+                        </article>
+                        <article class="testimonial">
+                            <blockquote>"أنا سمية من الرباط، توصلت مع 3 أصحاب عمل مباشرة عبر WhatsApp خلال يومين."</blockquote>
+                            <p class="testimonial-author">سمية - عاملة تشطيب</p>
+                        </article>
+                        <article class="testimonial">
+                            <blockquote>"KHEDMA سهلت علينا التوظيف الموسمي في مراكش بدون تعقيدات أو وسطاء."</blockquote>
+                            <p class="testimonial-author">ياسين - مدير مشاريع</p>
+                        </article>
+                    </div>
+                </section>
+
+                <footer class="landing-footer reveal-section" style="--reveal-delay: 200ms;">
+                    <p class="landing-footer-copy">Copyright 2026 KHEDMA</p>
+                    <nav class="landing-footer-links" aria-label="روابط التذييل">
+                        <a href="#" onclick="localStorage.removeItem('khedma.onboardingComplete'); localStorage.removeItem('khedma.userProfile'); location.reload(); return false;">إعادة التجربة</a>
+                        <a href="#">من نحن</a>
+                        <a href="#">تواصل معنا</a>
+                    </nav>
+                </footer>
+            </div>
+        </section>
+
+        <section id="employerRegisterView" class="view-section app-view hidden" aria-hidden="true">
+            <div class="auth-card">
+                <p class="header-eyebrow">تسجيل صاحب عمل</p>
+                <h2 class="auth-title">إنشاء حساب صاحب عمل</h2>
+                <p class="auth-sub">أدخل معلوماتك الأساسية لبدء نشر الوظائف واستقبال المتقدمين.</p>
+                <form id="employerRegisterForm" class="form-grid" novalidate>
+                    <div class="field-group">
+                        <label for="employerName">الاسم</label>
+                        <input type="text" id="employerName" class="input-field" required placeholder="الاسم الكامل">
+                    </div>
+                    <div class="field-group">
+                        <label for="employerPhone">رقم الهاتف</label>
+                        <input type="tel" id="employerPhone" class="input-field" required placeholder="06XXXXXXXX">
+                    </div>
+                    <div class="field-group">
+                        <label for="employerCompany">اسم الشركة (اختياري)</label>
+                        <input type="text" id="employerCompany" class="input-field" placeholder="مثال: شركة البناء الحديثة">
+                    </div>
+                    <div class="auth-actions">
+                        <button type="button" class="ghost-btn" id="employerBackBtn">رجوع</button>
+                        <button type="submit" class="post-job-btn" id="employerSubmitBtn">إنشاء حساب</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <section id="workerRegisterView" class="view-section app-view hidden" aria-hidden="true">
+            <div class="auth-card">
+                <p class="header-eyebrow">تسجيل عامل</p>
+                <h2 class="auth-title">إنشاء حساب عامل</h2>
+                <p class="auth-sub">أكمل ملفك المهني لتصفح الوظائف والتقديم مباشرة.</p>
+                <form id="workerRegisterForm" class="form-grid" novalidate>
+                    <div class="field-group">
+                        <label for="workerFullName">الاسم الكامل</label>
+                        <input type="text" id="workerFullName" class="input-field" required placeholder="الاسم الكامل">
+                    </div>
+                    <div class="field-group">
+                        <label for="workerPhone">رقم الهاتف</label>
+                        <input type="tel" id="workerPhone" class="input-field" required placeholder="06XXXXXXXX">
+                    </div>
+                    <div class="field-group">
+                        <label for="workerSkills">المهارات (يمكن اختيار أكثر من مهارة)</label>
+                        <select id="workerSkills" class="input-field skills-select" multiple required>
+                            <option value="نجار">نجار</option>
+                            <option value="سباك">سباك</option>
+                            <option value="electrician">electrician (كهربائي)</option>
+                            <option value="عامل بناء">عامل بناء</option>
+                            <option value="سائق">سائق</option>
+                            <option value="حداد">حداد</option>
+                            <option value="دهان">دهان</option>
+                            <option value="عامل نظافة">عامل نظافة</option>
+                            <option value="طباخ">طباخ</option>
+                        </select>
+                    </div>
+                    <div class="field-group">
+                        <label for="workerExperience">مستوى الخبرة</label>
+                        <select id="workerExperience" class="input-field" required>
+                            <option value="">اختر المستوى</option>
+                            <option value="beginner">مبتدئ</option>
+                            <option value="intermediate">متوسط</option>
+                            <option value="expert">خبير</option>
+                        </select>
+                    </div>
+                    <div class="field-group">
+                        <label for="workerCity">المدينة</label>
+                        <select id="workerCity" class="input-field" required>
+                            <option value="">اختر المدينة</option>
+                            <option value="Rabat">الرباط</option>
+                            <option value="Casablanca">الدار البيضاء</option>
+                            <option value="Marrakech">مراكش</option>
+                            <option value="Tangier">طنجة</option>
+                        </select>
+                    </div>
+                    <div class="auth-actions">
+                        <button type="button" class="ghost-btn" id="workerBackBtn">رجوع</button>
+                        <button type="submit" class="post-job-btn" id="workerSubmitBtn">إنشاء حساب</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <section id="employerDashboardView" class="view-section app-view hidden" aria-hidden="true">
+            <header class="header">
+                <div>
+                    <p class="header-eyebrow">لوحة صاحب العمل</p>
+                    <h1 id="employerWelcome">مرحباً</h1>
+                    <p class="header-sub" id="employerSubline"></p>
+                </div>
+                <div class="header-metrics">
+                    <div class="metric-card">
+                        <strong id="employerJobsMetric">0</strong>
+                        <span>وظائف منشورة</span>
+                    </div>
+                    <div class="metric-card">
+                        <strong id="employerPendingMetric">0</strong>
+                        <span>طلبات قيد المراجعة</span>
+                    </div>
+                    <div class="metric-card">
+                        <strong id="employerApplicantsMetric">0</strong>
+                        <span>إجمالي المتقدمين</span>
+                    </div>
+                </div>
+            </header>
+
+            <section class="control-panel">
+                <div class="section-title dashboard-actions">
+                    <h2>إدارة الوظائف</h2>
+                    <div class="inline-actions">
+                        <button type="button" class="post-job-btn" id="togglePostJobBtn">نشر وظيفة جديدة</button>
+                        <button type="button" class="ghost-btn" id="employerLogoutBtn">تسجيل خروج</button>
+                    </div>
+                </div>
+
+                <form id="postJobForm" class="job-form hidden" novalidate>
+                    <div class="job-form-grid">
+                        <div class="field-group">
+                            <label for="jobTitle">عنوان الوظيفة</label>
+                            <input type="text" id="jobTitle" class="input-field" required placeholder="مثال: نجار محترف">
+                        </div>
+                        <div class="field-group">
+                            <label for="jobSalaryText">الراتب (نصي)</label>
+                            <input type="text" id="jobSalaryText" class="input-field" required placeholder="مثال: 4500-6000 درهم/شهر">
+                        </div>
+                        <div class="field-group">
+                            <label for="jobSalaryNum">الراتب الرقمي للفلاتر</label>
+                            <input type="number" id="jobSalaryNum" class="input-field" min="1" required placeholder="مثال: 4500">
+                        </div>
+                        <div class="field-group">
+                            <label for="jobCity">المدينة</label>
+                            <select id="jobCity" class="input-field" required>
+                                <option value="">اختر المدينة</option>
+                                <option value="Rabat">الرباط</option>
+                                <option value="Casablanca">الدار البيضاء</option>
+                                <option value="Marrakech">مراكش</option>
+                                <option value="Tangier">طنجة</option>
+                            </select>
+                        </div>
+                        <div class="field-group">
+                            <label for="jobArea">الحي / المنطقة</label>
+                            <input type="text" id="jobArea" class="input-field" required placeholder="مثال: المعاريف">
+                        </div>
+                        <div class="field-group">
+                            <label for="jobDate">تاريخ النشر</label>
+                            <select id="jobDate" class="input-field" required>
+                                <option value="today">اليوم</option>
+                                <option value="week">هذا الأسبوع</option>
+                                <option value="month">هذا الشهر</option>
+                            </select>
+                        </div>
+                        <div class="field-group span-2">
+                            <label for="jobDescription">وصف الوظيفة</label>
+                            <textarea id="jobDescription" class="input-field" rows="4" required placeholder="اكتب المتطلبات والمهام الأساسية..."></textarea>
+                        </div>
+                    </div>
+                    <div class="auth-actions">
+                        <button type="submit" class="post-job-btn" id="postJobSubmitBtn">نشر الوظيفة</button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="section-spacer">
+                <div class="section-title">
+                    <h2>وظائفي المنشورة</h2>
+                    <span class="results-count" id="employerJobsCount">0 وظيفة</span>
+                </div>
+                <div class="jobs-list" id="employerJobsList"></div>
+            </section>
+        </section>
+
+        <section id="workerDashboardView" class="view-section app-view hidden" aria-hidden="true">
+            <header class="header">
+                <div>
+                    <p class="header-eyebrow">لوحة العامل</p>
+                    <h1 id="workerWelcome">مرحباً</h1>
+                    <p class="header-sub" id="workerSubline"></p>
+                </div>
+                <div class="header-metrics">
+                    <div class="metric-card">
+                        <strong id="workerJobsMetric">0</strong>
+                        <span>وظائف مطابقة</span>
+                    </div>
+                    <div class="metric-card">
+                        <strong id="workerAppsMetric">0</strong>
+                        <span>إجمالي طلباتي</span>
+                    </div>
+                    <div class="metric-card">
+                        <strong id="workerAcceptedMetric">0</strong>
+                        <span>طلبات مقبولة</span>
+                    </div>
+                </div>
+            </header>
+
+            <section class="control-panel">
+                <div class="section-title dashboard-actions">
+                    <h2>تصفح الوظائف والتقديم</h2>
+                    <button type="button" class="ghost-btn" id="workerLogoutBtn">تسجيل خروج</button>
+                </div>
+
+                <div class="tabs" role="tablist" aria-label="أقسام العامل">
+                    <button id="workerTabJobs" class="tab active" data-worker-tab="jobs" role="tab" aria-selected="true" aria-controls="workerJobsPanel" tabindex="0">كل الوظائف</button>
+                    <button id="workerTabApplications" class="tab" data-worker-tab="applications" role="tab" aria-selected="false" aria-controls="workerApplicationsPanel" tabindex="-1">طلباتي</button>
+                </div>
+
+                <div class="search-section" id="workerSearchSection">
+                    <label class="search-box" for="workerSearchInput">
+                        <span class="search-icon">بحث</span>
+                        <input type="text" class="search-input" id="workerSearchInput" placeholder="ابحث عن وظيفة أو شركة أو مجال...">
+                    </label>
+                    <div class="filters-row">
+                        <select class="filter-select" id="workerSalaryFilter">
+                            <option value="">الراتب</option>
+                            <option value="0-3000">أقل من 3000</option>
+                            <option value="3000-5000">3000 - 5000</option>
+                            <option value="5000-7000">5000 - 7000</option>
+                            <option value="7000+">أكثر من 7000</option>
+                        </select>
+                        <select class="filter-select" id="workerDateFilter">
+                            <option value="">التاريخ</option>
+                            <option value="today">اليوم</option>
+                            <option value="week">هذا الأسبوع</option>
+                            <option value="month">هذا الشهر</option>
+                        </select>
+                        <select class="filter-select" id="workerCityFilter">
+                            <option value="">المدينة</option>
+                            <option value="Rabat">الرباط</option>
+                            <option value="Casablanca">الدار البيضاء</option>
+                            <option value="Marrakech">مراكش</option>
+                            <option value="Tangier">طنجة</option>
+                        </select>
+                        <button type="button" class="clear-filters-btn" id="workerClearFiltersBtn">إعادة التعيين</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="workerJobsPanel" class="view-section" role="tabpanel" aria-labelledby="workerTabJobs">
+                <div class="explorer-layout">
+                    <aside class="map-section">
+                        <div class="map-head">
+                            <h3>خريطة الوظائف</h3>
+                            <p>توزيع الوظائف الحالية حسب المدن والمناطق.</p>
+                        </div>
+                        <div class="map-container" id="workerMapContainer">
+                            <div class="map-label">جاري تحميل الوظائف...</div>
+                        </div>
+                        <div class="map-legend">
+                            <span class="legend-item"><span class="legend-dot urgent"></span> عاجل</span>
+                            <span class="legend-item"><span class="legend-dot today"></span> اليوم</span>
+                            <span class="legend-item"><span class="legend-dot"></span> متاح</span>
+                        </div>
+                    </aside>
+
+                    <div class="jobs-column">
+                        <div class="section-title">
+                            <h2>الوظائف المتاحة الآن</h2>
+                            <span class="results-count" id="workerResultsCount">0 نتيجة</span>
+                        </div>
+                        <div class="jobs-list" id="workerJobsList"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="workerApplicationsPanel" class="view-section hidden" role="tabpanel" aria-labelledby="workerTabApplications" aria-hidden="true">
+                <div class="section-title">
+                    <h2>حالة طلباتي</h2>
+                    <span class="results-count" id="workerApplicationsCount">0 طلب</span>
+                </div>
+                <div class="jobs-list" id="workerApplicationsList"></div>
+            </section>
+        </section>
+    </div>
+
+    <!-- Report Modal -->
+    <div class="modal-overlay" id="reportModal">
+        <div class="modal report-modal">
+            <div class="modal-header">
+                <h2 class="modal-title">🚩 الإبلاغ عن مشكلة</h2>
+                <button type="button" class="modal-close" onclick="closeReportModal()">×</button>
+            </div>
+            <p class="modal-company" id="reportTargetInfo">جارٍ تحميل المعلومات...</p>
+            <div class="modal-section">
+                <h4>نوع المشكلة</h4>
+                <div class="report-options">
+                    <button type="button" class="report-option" data-report-type="spam">📢 رسالة مزعجة (سبام)</button>
+                    <button type="button" class="report-option" data-report-type="inappropriate">⚠️ محتوى غير لائق</button>
+                    <button type="button" class="report-option" data-report-type="scam">🚨 احتيال أو نصب</button>
+                    <button type="button" class="report-option" data-report-type="other">❓ أخرى</button>
+                </div>
+            </div>
+            <div class="modal-section">
+                <h4>تفاصيل إضافية (اختياري)</h4>
+                <textarea class="report-textarea" id="reportDetails" placeholder="اشرح المشكلة بشكل مختصر..."></textarea>
+            </div>
+            <button type="button" class="report-submit-btn" id="reportSubmitBtn" onclick="submitReport()" disabled>إرسال البلاغ</button>
+        </div>
+    </div>
+
+    <!-- Safety Tips Modal -->
+    <div class="modal-overlay" id="safetyModal">
+        <div class="modal safety-modal">
+            <div class="modal-header">
+                <h2 class="modal-title">🛡️ نصائح السلامة</h2>
+                <button type="button" class="modal-close" onclick="closeSafetyModal()">×</button>
+            </div>
+            <ul class="safety-tips-list">
+                <li>
+                    <div class="safety-tip-icon">📍</div>
+                    <div class="safety-tip-text">
+                        <h4>التقي في الأماكن العامة</h4>
+                        <p>قم دائماً بالتقي في места مزدحمة وآمنة مثل المقاهي أو المراكز التجارية.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="safety-tip-icon">💰</div>
+                    <div class="safety-tip-text">
+                        <h4>لا تدفع مقدماً</h4>
+                        <p>لا تدفع أي مبلغ مالي قبل بدء العمل أو التأكد من جدية العرض.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="safety-tip-icon">✅</div>
+                    <div class="safety-tip-text">
+                        <h4>تحقق من هوية الشخص</h4>
+                        <p>اطلب الاطلاع على الهوية الشخصية والتأكد من مطابقة البيانات.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="safety-tip-icon">🤔</div>
+                    <div class="safety-tip-text">
+                        <h4>وثق بحدسك</h4>
+                        <p>إذا شعرت بشيء غير طبيعي أو مريب، لا تتردد في الانسحاب.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="safety-tip-icon">📱</div>
+                    <div class="safety-tip-text">
+                        <h4>أبلغ عن الأنشطة المشبوهة</h4>
+                        <p>إذا اكتشفت نشاطاً مريباً، قم بالإبلاغ عنه فوراً لحماية الآخرين.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Profile View Modal -->
+    <div class="modal-overlay" id="profileModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">ملف المستخدم</h2>
+                <button type="button" class="modal-close" onclick="closeProfileModal()">×</button>
+            </div>
+            <div id="profileModalContent"></div>
+        </div>
+    </div>
+
+    <button type="button" class="safety-tips-btn" onclick="openSafetyModal()" title="نصائح السلامة" style="display:none;">🛡️</button>
+
+    <!-- Onboarding Welcome Screens -->
+    <div class="onboarding-overlay" id="onboardingOverlay">
+        <div class="onboarding-container">
+            <div class="onboarding-progress">
+                <span class="onboarding-dot active" data-slide="0"></span>
+                <span class="onboarding-dot" data-slide="1"></span>
+                <span class="onboarding-dot" data-slide="2"></span>
+            </div>
+            
+            <div class="onboarding-slide active" data-slide="0">
+                <div class="onboarding-icon">💼</div>
+                <h2 class="onboarding-title">اعثر على عمل بسرعة</h2>
+                <p class="onboarding-subtitle">ابحث عن أفضل الفرص في مدينتك خلال دقائق</p>
+            </div>
+            
+            <div class="onboarding-slide" data-slide="1">
+                <div class="onboarding-icon">🛡️</div>
+                <h2 class="onboarding-title">تواصل مع موثوقين</h2>
+                <p class="onboarding-subtitle">تواصل مباشرة مع أصحاب عمل موثوقين عبر WhatsApp</p>
+            </div>
+            
+            <div class="onboarding-slide" data-slide="2">
+                <div class="onboarding-icon">🚀</div>
+                <h2 class="onboarding-title">ابدأ الآن</h2>
+                <p class="onboarding-subtitle">انضم لمنصة KHEDMA وابدأ رحلتك</p>
+            </div>
+            
+            <div class="onboarding-nav">
+                <button type="button" class="onboarding-skip" onclick="skipOnboarding()">Skip</button>
+                <button type="button" class="onboarding-next" onclick="nextOnboardingSlide()" id="onboardingNextBtn">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Role Selection Modal -->
+    <div class="role-selection-overlay" id="roleSelectionOverlay">
+        <div class="role-selection-modal">
+            <h2 class="role-selection-title">اختر دورك</h2>
+            <p class="role-selection-sub">هل أنت ناشر وظائف أم عامل يبحث عن عمل؟</p>
+            <div class="role-options">
+                <div class="role-option" onclick="selectRole('employer')">
+                    <div class="role-option-icon employer">👔</div>
+                    <div class="role-option-text">
+                        <h3>ناشر</h3>
+                        <p>أريد نشر وظائف والتواصل مع عمال</p>
+                    </div>
+                </div>
+                <div class="role-option" onclick="selectRole('worker')">
+                    <div class="role-option-icon worker">🔨</div>
+                    <div class="role-option-text">
+                        <h3>عامل</h3>
+                        <p>أبحث عن فرصة عمل</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Completion Modal -->
+    <div class="profile-modal-overlay" id="profileModalOverlay">
+        <div class="profile-modal">
+            <div class="profile-modal-header">
+                <div class="profile-modal-icon">👤</div>
+                <h2 class="profile-modal-title">أكمل ملفك الشخصي</h2>
+                <p class="profile-modal-sub">أدخل بياناتك للمتابعة</p>
+            </div>
+            <form class="profile-form" id="profileForm" onsubmit="saveProfile(event)">
+                <div class="profile-field">
+                    <label for="profileName">الاسم الكامل</label>
+                    <input type="text" id="profileName" required placeholder="أدخل اسمك الكامل">
+                </div>
+                <div class="profile-field">
+                    <label for="profilePhone">رقم الهاتف</label>
+                    <input type="tel" id="profilePhone" required placeholder="06XXXXXXXX">
+                </div>
+                <div class="profile-field">
+                    <label for="profileCity">المدينة</label>
+                    <select id="profileCity" required>
+                        <option value="">اختر المدينة</option>
+                        <option value="Casablanca">الدار البيضاء</option>
+                        <option value="Rabat">الرباط</option>
+                        <option value="Marrakech">مراكش</option>
+                        <option value="Tangier">طنجة</option>
+                        <option value="Fes">فاس</option>
+                        <option value="Agadir">أغادير</option>
+                        <option value="Meknes">مكناس</option>
+                        <option value="Oujda">وجدة</option>
+                        <option value="Kenitra">القنيطرة</option>
+                        <option value="Tetouan">تطوان</option>
+                    </select>
+                </div>
+                <div class="profile-submit">
+                    <button type="submit">متابعة</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Skills Selection Modal -->
+    <div class="skills-modal-overlay" id="skillsModalOverlay">
+        <div class="skills-modal">
+            <div class="skills-modal-header">
+                <h2 class="skills-modal-title">اختر مهاراتك</h2>
+                <p class="skills-modal-sub">حدد المهارات التي تمتلكها (اختياري)</p>
+            </div>
+            <div class="skills-grid" id="skillsGrid">
+                <label class="skill-checkbox">
+                    <input type="checkbox" value="نجار">
+                    <span class="skill-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                    <span class="skill-label">نجار</span>
+                </label>
+                <label class="skill-checkbox">
+                    <input type="checkbox" value="كهربائي">
+                    <span class="skill-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                    <span class="skill-label">كهربائي</span>
+                </label>
+                <label class="skill-checkbox">
+                    <input type="checkbox" value="سباك">
+                    <span class="skill-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                    <span class="skill-label">سباك</span>
+                </label>
+                <label class="skill-checkbox">
+                    <input type="checkbox" value="دهان">
+                    <span class="skill-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                    <span class="skill-label">دهان</span>
+                </label>
+                <label class="skill-checkbox">
+                    <input type="checkbox" value="حداد">
+                    <span class="skill-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                    <span class="skill-label">حداد</span>
+                </label>
+                <label class="skill-checkbox">
+                    <input type="checkbox" value="عامل بناء">
+                    <span class="skill-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                    <span class="skill-label">عامل بناء</span>
+                </label>
+                <label class="skill-checkbox">
+                    <input type="checkbox" value="سائق">
+                    <span class="skill-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                    <span class="skill-label">سائق</span>
+                </label>
+                <label class="skill-checkbox">
+                    <input type="checkbox" value="عامل نظافة">
+                    <span class="skill-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                    <span class="skill-label">عامل نظافة</span>
+                </label>
+                <label class="skill-checkbox">
+                    <input type="checkbox" value="طباخ">
+                    <span class="skill-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                    <span class="skill-label">طباخ</span>
+                </label>
+                <label class="skill-checkbox">
+                    <input type="checkbox" value="家政">
+                    <span class="skill-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                    <span class="skill-label">家政 (عاملة منزلية)</span>
+                </label>
+                <label class="skill-checkbox">
+                    <input type="checkbox" value="مزارع">
+                    <span class="skill-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                    <span class="skill-label">مزارع</span>
+                </label>
+                <label class="skill-checkbox">
+                    <input type="checkbox" value="بائع">
+                    <span class="skill-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                    <span class="skill-label">بائع</span>
+                </label>
+            </div>
+            <p class="skills-selected-count" id="skillsCount">0 مهارات مختارة</p>
+            <div class="skills-actions">
+                <button type="button" class="skills-skip" onclick="skipSkills()">تخطي</button>
+                <button type="button" class="skills-done" id="skillsDoneBtn" onclick="saveSkills()" disabled>تم</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Onboarding State
+        const ONBOARDING_KEY = "khedma.onboardingComplete";
+        let currentOnboardingSlide = 0;
+        let selectedRole = null;
+        let onboardingTouchStartX = null;
+        let onboardingTouchStartY = null;
+        let onboardingSwipeInitialized = false;
+        const ONBOARDING_SWIPE_THRESHOLD = 50;
+        
+        // Onboarding Functions
+        function checkOnboarding() {
+            const onboardingComplete = localStorage.getItem(ONBOARDING_KEY);
+            if (!onboardingComplete) {
+                showOnboarding();
+            } else {
+                // Check if user needs to complete profile
+                checkProfileCompletion();
+            }
+        }
+        
+        function showOnboarding() {
+            document.getElementById('onboardingOverlay').classList.add('active');
+            currentOnboardingSlide = 0;
+            initOnboardingSwipe();
+            updateOnboardingSlide();
+            // Hide other overlays
+            document.getElementById('roleSelectionOverlay').classList.remove('active');
+            document.getElementById('profileModalOverlay').classList.remove('active');
+            document.getElementById('skillsModalOverlay').classList.remove('active');
+        }
+        
+        function updateOnboardingSlide() {
+            const slides = document.querySelectorAll('.onboarding-slide');
+            const dots = document.querySelectorAll('.onboarding-dot');
+            
+            slides.forEach((slide, index) => {
+                slide.classList.toggle('active', index === currentOnboardingSlide);
+            });
+            
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentOnboardingSlide);
+            });
+            
+            const nextBtn = document.querySelector('.onboarding-next');
+            if (currentOnboardingSlide === 2) {
+                nextBtn.textContent = 'Start';
+            } else {
+                nextBtn.textContent = 'Next';
+            }
+        }
+        
+        function nextOnboardingSlide() {
+            if (currentOnboardingSlide < 2) {
+                currentOnboardingSlide++;
+                updateOnboardingSlide();
+            } else {
+                finishOnboarding();
+            }
+        }
+        
+        function skipOnboarding() {
+            finishOnboarding();
+        }
+
+        // Swipe support for onboarding
+        function initOnboardingSwipe() {
+            if (onboardingSwipeInitialized) return;
+            const onboardingContainer = document.querySelector('.onboarding-container');
+            if (!onboardingContainer) return;
+
+            onboardingContainer.addEventListener('touchstart', handleOnboardingTouchStart, { passive: true });
+            onboardingContainer.addEventListener('touchend', handleOnboardingTouchEnd, { passive: true });
+            onboardingSwipeInitialized = true;
+        }
+
+        function handleOnboardingTouchStart(event) {
+            if (!event.touches || event.touches.length !== 1) {
+                onboardingTouchStartX = null;
+                onboardingTouchStartY = null;
+                return;
+            }
+
+            onboardingTouchStartX = event.touches[0].clientX;
+            onboardingTouchStartY = event.touches[0].clientY;
+        }
+
+        function handleOnboardingTouchEnd(event) {
+            if (
+                onboardingTouchStartX === null ||
+                onboardingTouchStartY === null ||
+                !event.changedTouches ||
+                event.changedTouches.length !== 1
+            ) {
+                return;
+            }
+
+            const touchEndX = event.changedTouches[0].clientX;
+            const touchEndY = event.changedTouches[0].clientY;
+            const deltaX = touchEndX - onboardingTouchStartX;
+            const deltaY = touchEndY - onboardingTouchStartY;
+
+            onboardingTouchStartX = null;
+            onboardingTouchStartY = null;
+
+            if (Math.abs(deltaX) < ONBOARDING_SWIPE_THRESHOLD || Math.abs(deltaX) <= Math.abs(deltaY)) {
+                return;
+            }
+
+            if (deltaX < 0) {
+                nextOnboardingSlide();
+            } else {
+                prevOnboardingSlide();
+            }
+        }
+
+        function prevOnboardingSlide() {
+            if (currentOnboardingSlide > 0) {
+                currentOnboardingSlide--;
+                updateOnboardingSlide();
+            }
+        }
+        
+        function finishOnboarding() {
+            localStorage.setItem(ONBOARDING_KEY, 'true');
+            document.getElementById('onboardingOverlay').classList.remove('active');
+            showRoleSelection();
+        }
+        
+        function showRoleSelection() {
+            document.getElementById('roleSelectionOverlay').classList.add('active');
+        }
+        
+        function hideRoleSelection() {
+            document.getElementById('roleSelectionOverlay').classList.remove('active');
+        }
+        
+        function selectRole(role) {
+            selectedRole = role;
+            hideRoleSelection();
+            showProfileCompletion();
+        }
+        
+        function showProfileCompletion() {
+            document.getElementById('profileModalOverlay').classList.add('active');
+        }
+        
+        function hideProfileCompletion() {
+            document.getElementById('profileModalOverlay').classList.remove('active');
+        }
+        
+        function saveProfile(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('profileName').value.trim();
+            const phone = document.getElementById('profilePhone').value.trim();
+            const city = document.getElementById('profileCity').value;
+            
+            if (!name || !phone || !city) {
+                alert('الرجاء تعبئة جميع الحقول');
+                return;
+            }
+            
+            // Save to localStorage
+            const profileData = {
+                name: name,
+                phone: phone,
+                city: city,
+                role: selectedRole,
+                createdAt: new Date().toISOString()
+            };
+            
+            localStorage.setItem('khedma.userProfile', JSON.stringify(profileData));
+            
+            hideProfileCompletion();
+            
+            // If worker role, show skills selection
+            if (selectedRole === 'worker') {
+                showSkillsSelection();
+            } else {
+                // For employer, complete registration
+                completeRegistration(profileData);
+            }
+        }
+        
+        function showSkillsSelection() {
+            // Reset skills checkboxes
+            document.querySelectorAll('.skill-checkbox').forEach(cb => {
+                cb.classList.remove('selected');
+                cb.querySelector('input').checked = false;
+            });
+            updateSkillsCount();
+            document.getElementById('skillsModalOverlay').classList.add('active');
+        }
+        
+        function hideSkillsSelection() {
+            document.getElementById('skillsModalOverlay').classList.remove('active');
+        }
+        
+        // Skills checkbox handling
+        document.querySelectorAll('.skill-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('click', function() {
+                const input = this.querySelector('input');
+                input.checked = !input.checked;
+                this.classList.toggle('selected', input.checked);
+                updateSkillsCount();
+            });
+        });
+        
+        function updateSkillsCount() {
+            const checked = document.querySelectorAll('.skill-checkbox input:checked').length;
+            document.getElementById('skillsCount').textContent = checked + ' مهارات مختارة';
+            document.getElementById('skillsDoneBtn').disabled = false;
+        }
+        
+        function skipSkills() {
+            hideSkillsSelection();
+            // Get saved profile and complete registration
+            const profileData = JSON.parse(localStorage.getItem('khedma.userProfile') || '{}');
+            profileData.skills = [];
+            completeRegistration(profileData);
+        }
+        
+        function saveSkills() {
+            const skills = Array.from(document.querySelectorAll('.skill-checkbox input:checked')).map(input => input.value);
+            const profileData = JSON.parse(localStorage.getItem('khedma.userProfile') || '{}');
+            profileData.skills = skills;
+            localStorage.setItem('khedma.userProfile', JSON.stringify(profileData));
+            hideSkillsSelection();
+            completeRegistration(profileData);
+        }
+        
+        function checkProfileCompletion() {
+            const profileData = localStorage.getItem('khedma.userProfile');
+            if (!profileData) {
+                showRoleSelection();
+                return;
+            }
+            
+            const profile = JSON.parse(profileData);
+            if (!profile.role || !profile.name || !profile.phone || !profile.city) {
+                showRoleSelection();
+                return;
+            }
+            
+            // Profile complete, continue to app
+            // Restore user session if exists
+            restoreSession();
+        }
+        
+        function completeRegistration(profileData) {
+            // Create user based on role
+            if (profileData.role === 'employer') {
+                state.currentUser = {
+                    id: Date.now(),
+                    role: 'employer',
+                    name: profileData.name,
+                    phone: profileData.phone,
+                    company: ''
+                };
+            } else {
+                state.currentUser = {
+                    id: Date.now(),
+                    role: 'worker',
+                    name: profileData.name,
+                    phone: profileData.phone,
+                    city: profileData.city,
+                    skills: profileData.skills || [],
+                    experience: ''
+                };
+            }
+            
+            saveCurrentUser();
+            persistCollections();
+            
+            // Show appropriate dashboard
+            if (state.currentUser.role === 'employer') {
+                showScreen('employerDashboard');
+            } else {
+                showScreen('workerDashboard');
+            }
+        }
+
+        // Initialize onboarding check on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(checkOnboarding, 500);
+        });
+
+        // Also check immediately in case DOM is already loaded
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            setTimeout(checkOnboarding, 500);
+        }
+
+        const STORAGE_KEYS = {
+            currentUser: "khedma.currentUser",
+            postedJobs: "khedma.postedJobs",
+            applications: "khedma.applications",
+            ratings: "khedma.ratings",
+            reports: "khedma.reports"
+        };
+
+        // Trust & Safety - User verification data (simulated)
+        const userVerifications = {
+            "212661234567": { id: true, phone: true, email: true },
+            "212662345678": { id: false, phone: true, email: false },
+            "212663456789": { id: true, phone: true, email: true },
+            "212664567890": { id: false, phone: true, email: false },
+            "212665678901": { id: true, phone: true, email: true },
+            "212666789012": { id: false, phone: true, email: false },
+            "212667890123": { id: true, phone: true, email: true },
+            "212668901234": { id: false, phone: true, email: false },
+            "employer1": { id: true, phone: true, email: true },
+            "employer2": { id: false, phone: true, email: false },
+            "worker1": { id: true, phone: true, email: true },
+            "worker2": { id: false, phone: true, email: false },
+            "default": { id: false, phone: false, email: false }
+        };
+
+        // Trust & Safety - Get user verification status
+        function getUserVerification(userId) {
+            return userVerifications[userId] || userVerifications["default"];
+        }
+
+        function hasAnyVerification(userId) {
+            const v = getUserVerification(userId);
+            return v.id || v.phone || v.email;
+        }
+
+        // Trust & Safety - Render verified badge
+        function renderVerifiedBadge(userId) {
+            const v = getUserVerification(userId);
+            if (!hasAnyVerification(userId)) return '';
+            
+            let levels = [];
+            if (v.id) levels.push('هوية');
+            if (v.phone) levels.push('هاتف');
+            if (v.email) levels.push('بريد');
+            
+            const tooltipText = '✓ موثق (' + levels.join('، ') + ')';
+            
+            return `<span class="verified-badge verified verification-tooltip">
+                ✓
+                <span class="tooltip-content">${tooltipText}</span>
+            </span>`;
+        }
+
+        // Trust & Safety - Load ratings from storage
+        function loadRatings() {
+            return loadFromStorage(STORAGE_KEYS.ratings, {});
+        }
+
+        function saveRatings(ratings) {
+            saveToStorage(STORAGE_KEYS.ratings, ratings);
+        }
+
+        // Trust & Safety - Get average rating for a user
+        function getUserRating(userId) {
+            const ratings = loadRatings();
+            const userRatings = ratings[userId] || [];
+            if (userRatings.length === 0) return { average: 0, count: 0 };
+            
+            const sum = userRatings.reduce((a, b) => a + b, 0);
+            return {
+                average: Math.round((sum / userRatings.length) * 10) / 10,
+                count: userRatings.length
+            };
+        }
+
+        // Trust & Safety - Render star rating display
+        function renderStarRating(userId, size = 'normal') {
+            const rating = getUserRating(userId);
+            if (rating.count === 0) return '';
+            
+            const fullStars = Math.floor(rating.average);
+            const hasHalf = rating.average % 1 >= 0.5;
+            let stars = '';
+            
+            for (let i = 0; i < 5; i++) {
+                if (i < fullStars) {
+                    stars += '<span class="star">★</span>';
+                } else if (i === fullStars && hasHalf) {
+                    stars += '<span class="star">★</span>';
+                } else {
+                    stars += '<span class="star empty">★</span>';
+                }
+            }
+            
+            return `<div class="rating-display">
+                ${stars}
+                <span class="rating-number">(${rating.average} • ${rating.count})</span>
+            </div>`;
+        }
+
+        // Trust & Safety - Render rating input
+        function renderRatingInput(targetId, targetType) {
+            const rating = getUserRating(targetId);
+            return `<div class="rating-input" data-target-id="${targetId}" data-target-type="${targetType}">
+                <button type="button" class="star-btn" data-rating="1">★</button>
+                <button type="button" class="star-btn" data-rating="2">★</button>
+                <button type="button" class="star-btn" data-rating="3">★</button>
+                <button type="button" class="star-btn" data-rating="4">★</button>
+                <button type="button" class="star-btn" data-rating="5">★</button>
+                <button type="button" class="rating-submit-btn" onclick="submitRating('${targetId}', '${targetType}')">تقييم</button>
+            </div>`;
+        }
+
+        // Trust & Safety - Submit rating
+        function submitRating(targetId, targetType) {
+            const container = document.querySelector(`.rating-input[data-target-id="${targetId}"]`);
+            if (!container) return;
+            
+            const activeBtn = container.querySelector('.star-btn.active');
+            if (!activeBtn) {
+                alert('الرجاء اختيار عدد النجوم أولاً');
+                return;
+            }
+            
+            const ratingValue = parseInt(activeBtn.dataset.rating);
+            const ratings = loadRatings();
+            
+            if (!ratings[targetId]) {
+                ratings[targetId] = [];
+            }
+            ratings[targetId].push(ratingValue);
+            saveRatings(ratings);
+            
+            alert('شكراً لك! تم تسجيل تقييمك.');
+            renderWorkerJobs();
+            renderWorkerApplications();
+        }
+
+        // Trust & Safety - Report functionality
+        let currentReportTarget = null;
+
+        function openReportModal(targetType, targetId, targetInfo) {
+            currentReportTarget = { type: targetType, id: targetId, info: targetInfo };
+            document.getElementById('reportTargetInfo').textContent = targetInfo;
+            document.getElementById('reportModal').classList.add('active');
+            document.body.classList.add('modal-open');
+            
+            // Reset form
+            document.querySelectorAll('.report-option').forEach(btn => btn.classList.remove('selected'));
+            document.getElementById('reportDetails').value = '';
+            document.getElementById('reportSubmitBtn').disabled = true;
+        }
+
+        function closeReportModal() {
+            document.getElementById('reportModal').classList.remove('active');
+            document.body.classList.remove('modal-open');
+            currentReportTarget = null;
+        }
+
+        function submitReport() {
+            if (!currentReportTarget) return;
+            
+            const selectedOption = document.querySelector('.report-option.selected');
+            if (!selectedOption) {
+                alert('الرجاء اختيار نوع المشكلة');
+                return;
+            }
+            
+            const reportType = selectedOption.dataset.reportType;
+            const details = document.getElementById('reportDetails').value.trim();
+            
+            const reports = loadFromStorage(STORAGE_KEYS.reports, []);
+            reports.push({
+                id: Date.now(),
+                type: currentReportTarget.type,
+                targetId: currentReportTarget.id,
+                reportType: reportType,
+                details: details,
+                reportedAt: new Date().toISOString(),
+                reporterId: state.currentUser ? state.currentUser.phone : 'anonymous'
+            });
+            saveToStorage(STORAGE_KEYS.reports, reports);
+            
+            alert('شكراً لك! تم إرسال البلاغ بنجاح. سنراجعه قريباً.');
+            closeReportModal();
+        }
+
+        // Report option selection
+        document.querySelectorAll('.report-option').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.report-option').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                document.getElementById('reportSubmitBtn').disabled = false;
+            });
+        });
+
+        // Trust & Safety - Safety tips modal
+        function openSafetyModal() {
+            document.getElementById('safetyModal').classList.add('active');
+            document.body.classList.add('modal-close');
+        }
+
+        function closeSafetyModal() {
+            document.getElementById('safetyModal').classList.remove('active');
+            document.body.classList.remove('modal-open');
+        }
+
+        // Trust & Safety - Profile modal
+        function openProfileModal(userId, userName, userType) {
+            const verification = getUserVerification(userId);
+            const rating = getUserRating(userId);
+            const hasVerification = hasAnyVerification(userId);
+            
+            let levels = [];
+            if (verification.id) levels.push('✓ بطاقة الهوية');
+            if (verification.phone) levels.push('✓ رقم الهاتف');
+            if (verification.email) levels.push('✓ البريد الإلكتروني');
+            
+            const content = `
+                <div class="modal-profile-view">
+                    <div class="modal-profile-avatar">${userName.charAt(0)}</div>
+                    <h3 class="modal-profile-name">${escapeHtml(userName)}${renderVerifiedBadge(userId).replace(/class="verified-badge/g, 'class="verified-badge" style="font-size:14px;margin-right:8px;"')}</h3>
+                    <p class="modal-profile-meta">${userType === 'employer' ? 'صاحب عمل' : 'عامل'} • ${levels.length > 0 ? levels.join(' • ') : 'غير موثق'}</p>
+                    
+                    ${rating.count > 0 ? `
+                        <div class="modal-profile-rating">
+                            ${renderStarRating(userId)}
+                        </div>
+                    ` : ''}
+                    
+                    ${state.currentUser && state.currentUser.role ? `
+                        <div style="margin-top:20px;">
+                            <h4 style="font-size:14px;margin-bottom:12px;">قيّم هذا المستخدم</h4>
+                            ${renderRatingInput(userId, userType)}
+                        </div>
+                    ` : ''}
+                    
+                    <div style="margin-top:20px;">
+                        <button type="button" class="report-btn" onclick="closeProfileModal(); openReportModal('${userType}', '${userId}', '${escapeHtml(userName)}');" style="color:var(--urgent);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+                                <line x1="4" y1="22" x2="4" y2="15"></line>
+                            </svg>
+                            الإبلاغ عن مشكلة
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('profileModalContent').innerHTML = content;
+            document.getElementById('profileModal').classList.add('active');
+            document.body.classList.add('modal-open');
+            
+            // Bind star button events
+            document.querySelectorAll('.rating-input .star-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const rating = this.dataset.rating;
+                    const container = this.closest('.rating-input');
+                    container.querySelectorAll('.star-btn').forEach((b, i) => {
+                        b.classList.toggle('active', i < rating);
+                    });
+                });
+            });
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profileModal').classList.remove('active');
+            document.body.classList.remove('modal-open');
+        }
+
+        // Trust & Safety - Get user ID from job
+        function getUserIdFromJob(job) {
+            return job.employerPhone || job.phone || 'default';
+        }
+
+        const seedJobs = [
+            {
+                id: 1,
+                title: "عامل بناء",
+                company: "مؤسسة البناء السريع",
+                salary: "300-400 درهما/يوم",
+                salaryNum: 300,
+                location: "Rabat",
+                area: "Agdal",
+                urgency: "urgent",
+                description: "نحتاج عامل بناء لديه خبرة في البناء والتشطيب للعمل في ورشة جديدة.",
+                date: "today",
+                dateLabel: "اليوم - عاجل",
+                phone: "212661234567"
+            },
+            {
+                id: 2,
+                title: "سائق توصيل",
+                company: "شركة الطيف للتوصيل",
+                salary: "4000-5000 درهما/شهر",
+                salaryNum: 4000,
+                location: "Casablanca",
+                area: "Maarif",
+                urgency: "today",
+                description: "سائق يملك سيارة للعمل في توصيل الطلبات داخل المدينة.",
+                date: "today",
+                dateLabel: "اليوم",
+                phone: "212662345678"
+            },
+            {
+                id: 3,
+                title: "نجار أثاث",
+                company: "ورشة فن الخشب",
+                salary: "4500-6000 درهما/شهر",
+                salaryNum: 4500,
+                location: "Rabat",
+                area: "Hay Riad",
+                urgency: "regular",
+                description: "نبحث عن نجار محترف للعمل في تصميم وتنفيذ الأثاث.",
+                date: "week",
+                dateLabel: "هذا الأسبوع",
+                phone: "212663456789"
+            },
+            {
+                id: 4,
+                title: "سباك",
+                company: "خدمات المنازل السريعة",
+                salary: "350-500 درهما/يوم",
+                salaryNum: 350,
+                location: "Casablanca",
+                area: "Sidi Maarouf",
+                urgency: "urgent",
+                description: "مطلوب سباك لصيانة دورية وإصلاحات منازل وشركات.",
+                date: "today",
+                dateLabel: "اليوم - عاجل",
+                phone: "212664567890"
+            },
+            {
+                id: 5,
+                title: "electrician",
+                company: "شركة الطاقة الذكية",
+                salary: "5000-7000 درهما/شهر",
+                salaryNum: 5000,
+                location: "Marrakech",
+                area: "Gueliz",
+                urgency: "regular",
+                description: "نحتاج electrician بخبرة في التركيبات الكهربائية المنزلية.",
+                date: "month",
+                dateLabel: "هذا الشهر",
+                phone: "212665678901"
+            },
+            {
+                id: 6,
+                title: "عامل نظافة",
+                company: "مؤسسة بيئة نظيفة",
+                salary: "2500-3200 درهما/شهر",
+                salaryNum: 2500,
+                location: "Tangier",
+                area: "Malabata",
+                urgency: "today",
+                description: "عامل نظافة لعمارة سكنية في الفترة الصباحية.",
+                date: "week",
+                dateLabel: "هذا الأسبوع",
+                phone: "212666789012"
+            },
+            {
+                id: 7,
+                title: "سائق",
+                company: "شركة لوجستيك المغرب",
+                salary: "4200-5200 درهما/شهر",
+                salaryNum: 4200,
+                location: "Rabat",
+                area: "Hassan",
+                urgency: "regular",
+                description: "سائق لديه رخصة مناسبة وخبرة في التوصيل داخل المدن.",
+                date: "week",
+                dateLabel: "هذا الأسبوع",
+                phone: "212667890123"
+            },
+            {
+                id: 8,
+                title: "عامل بناء",
+                company: "شركة الإعمار الحديثة",
+                salary: "3500-4800 درهما/شهر",
+                salaryNum: 3500,
+                location: "Casablanca",
+                area: "Derb Sultan",
+                urgency: "today",
+                description: "عامل بناء للعمل في مشروع سكني جديد لمدة ثلاثة أشهر.",
+                date: "today",
+                dateLabel: "اليوم",
+                phone: "212668901234"
+            }
+        ];
+
+        const cityLabels = {
+            Rabat: "الرباط",
+            Casablanca: "الدار البيضاء",
+            Marrakech: "مراكش",
+            Tangier: "طنجة"
+        };
+
+        const dateLabels = {
+            today: "اليوم",
+            week: "هذا الأسبوع",
+            month: "هذا الشهر"
+        };
+
+        const experienceLabels = {
+            beginner: "مبتدئ",
+            intermediate: "متوسط",
+            expert: "خبير"
+        };
+
+        const screenIds = {
+            landing: "landingView",
+            employerRegister: "employerRegisterView",
+            workerRegister: "workerRegisterView",
+            employerDashboard: "employerDashboardView",
+            workerDashboard: "workerDashboardView"
+        };
+
+        const state = {
+            currentUser: loadFromStorage(STORAGE_KEYS.currentUser, null),
+            postedJobs: loadFromStorage(STORAGE_KEYS.postedJobs, []),
+            applications: loadFromStorage(STORAGE_KEYS.applications, []),
+            workerTab: "jobs",
+            expandedJobId: null
+        };
+
+        if (!Array.isArray(state.postedJobs)) {
+            state.postedJobs = [];
+        }
+
+        if (!Array.isArray(state.applications)) {
+            state.applications = [];
+        }
+
+        if (!state.currentUser || typeof state.currentUser !== "object" || !state.currentUser.role) {
+            state.currentUser = null;
+        }
+
+        function loadFromStorage(key, fallback) {
+            try {
+                const raw = localStorage.getItem(key);
+                if (!raw) {
+                    return fallback;
+                }
+                return JSON.parse(raw);
+            } catch (error) {
+                return fallback;
+            }
+        }
+
+        function saveToStorage(key, value) {
+            localStorage.setItem(key, JSON.stringify(value));
+        }
+
+        function saveCurrentUser() {
+            if (state.currentUser) {
+                saveToStorage(STORAGE_KEYS.currentUser, state.currentUser);
+            } else {
+                localStorage.removeItem(STORAGE_KEYS.currentUser);
+            }
+        }
+
+        function persistCollections() {
+            saveToStorage(STORAGE_KEYS.postedJobs, state.postedJobs);
+            saveToStorage(STORAGE_KEYS.applications, state.applications);
+        }
+
+        function escapeHtml(value) {
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+        }
+
+        function formatCity(city) {
+            return cityLabels[city] || city;
+        }
+
+        function formatLocation(job) {
+            return escapeHtml(job.area) + "، " + escapeHtml(formatCity(job.location));
+        }
+
+        function getDateLabel(dateKey) {
+            return dateLabels[dateKey] || "هذا الشهر";
+        }
+
+        function getUrgencyLabel(urgency) {
+            switch (urgency) {
+                case "urgent":
+                    return { text: "عاجل", className: "urgent" };
+                case "today":
+                    return { text: "اليوم", className: "today" };
+                default:
+                    return { text: "متاح", className: "regular" };
+            }
+        }
+
+        function getStatusMeta(status) {
+            switch (status) {
+                case "accepted":
+                    return { label: "مقبول", className: "accepted" };
+                case "rejected":
+                    return { label: "مرفوض", className: "rejected" };
+                default:
+                    return { label: "قيد المراجعة", className: "pending" };
+            }
+        }
+
+        function toArabicDate(dateText) {
+            const date = new Date(dateText);
+            if (Number.isNaN(date.getTime())) {
+                return "غير محدد";
+            }
+            return date.toLocaleDateString("ar-MA", { year: "numeric", month: "short", day: "numeric" });
+        }
+
+        function hashText(text) {
+            let hash = 0;
+            for (let i = 0; i < text.length; i += 1) {
+                hash = (hash << 5) - hash + text.charCodeAt(i);
+                hash |= 0;
+            }
+            return Math.abs(hash);
+        }
+
+        function clamp(value, min, max) {
+            return Math.min(max, Math.max(min, value));
+        }
+
+        function getLocationCoords(city, area, id) {
+            const centers = {
+                Rabat: { x: 36, y: 41 },
+                Casablanca: { x: 64, y: 57 },
+                Marrakech: { x: 49, y: 72 },
+                Tangier: { x: 58, y: 24 }
+            };
+
+            const center = centers[city] || { x: 50, y: 50 };
+            const seed = hashText(city + "-" + area + "-" + id);
+            const offsetX = (seed % 17) - 8;
+            const offsetY = (Math.floor(seed / 17) % 17) - 8;
+
+            return {
+                x: clamp(center.x + offsetX, 9, 92),
+                y: clamp(center.y + offsetY, 12, 88)
+            };
+        }
+
+        let landingStatsAnimated = false;
+
+        function formatLandingNumber(value) {
+            return new Intl.NumberFormat("ar-MA").format(value);
+        }
+
+        function setLandingStatValue(element, value) {
+            const suffix = element.dataset.suffix || "";
+            element.textContent = formatLandingNumber(value) + suffix;
+        }
+
+        function runLandingStatsCounters(instant) {
+            const counters = Array.from(document.querySelectorAll(".stat-number"));
+            if (counters.length === 0) {
+                return;
+            }
+
+            if (instant) {
+                counters.forEach(function(counter) {
+                    const target = parseInt(counter.dataset.target || "0", 10);
+                    setLandingStatValue(counter, Number.isFinite(target) ? target : 0);
+                });
+                landingStatsAnimated = true;
+                return;
+            }
+
+            if (landingStatsAnimated) {
+                return;
+            }
+            landingStatsAnimated = true;
+
+            counters.forEach(function(counter, index) {
+                const target = parseInt(counter.dataset.target || "0", 10);
+                if (!Number.isFinite(target) || target <= 0) {
+                    setLandingStatValue(counter, 0);
+                    return;
+                }
+
+                const duration = 1100 + index * 170;
+                let startTime = null;
+
+                function updateCounter(timestamp) {
+                    if (startTime === null) {
+                        startTime = timestamp;
+                    }
+                    const progress = Math.min((timestamp - startTime) / duration, 1);
+                    const eased = 1 - Math.pow(1 - progress, 3);
+                    const currentValue = Math.floor(target * eased);
+                    setLandingStatValue(counter, currentValue);
+
+                    if (progress < 1) {
+                        window.requestAnimationFrame(updateCounter);
+                    } else {
+                        setLandingStatValue(counter, target);
+                    }
+                }
+
+                window.requestAnimationFrame(updateCounter);
+            });
+        }
+
+        function initLandingEffects() {
+            const revealSections = Array.from(document.querySelectorAll(".reveal-section"));
+            if (revealSections.length === 0) {
+                return;
+            }
+
+            const statsSection = document.getElementById("landingStatsSection");
+            const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+            if (prefersReducedMotion || typeof IntersectionObserver !== "function") {
+                revealSections.forEach(function(section) {
+                    section.classList.add("is-visible");
+                });
+                runLandingStatsCounters(true);
+                return;
+            }
+
+            const observer = new IntersectionObserver(function(entries, obs) {
+                entries.forEach(function(entry) {
+                    if (!entry.isIntersecting) {
+                        return;
+                    }
+
+                    entry.target.classList.add("is-visible");
+                    if (entry.target.id === "landingStatsSection") {
+                        runLandingStatsCounters(false);
+                    }
+                    obs.unobserve(entry.target);
+                });
+            }, {
+                threshold: 0.2,
+                rootMargin: "0px 0px -40px 0px"
+            });
+
+            revealSections.forEach(function(section) {
+                if (section.classList.contains("is-visible")) {
+                    return;
+                }
+                observer.observe(section);
+            });
+
+            if (statsSection && statsSection.classList.contains("is-visible")) {
+                runLandingStatsCounters(false);
+            }
+        }
+
+        function getAllJobs() {
+            return seedJobs.concat(state.postedJobs).sort(function(a, b) {
+                return Number(b.id) - Number(a.id);
+            });
+        }
+
+        function matchesDateFilter(jobDate, selectedDate) {
+            if (!selectedDate) {
+                return true;
+            }
+
+            if (selectedDate === "today") {
+                return jobDate === "today";
+            }
+
+            if (selectedDate === "week") {
+                return jobDate === "today" || jobDate === "week";
+            }
+
+            if (selectedDate === "month") {
+                return jobDate === "today" || jobDate === "week" || jobDate === "month";
+            }
+
+            return jobDate === selectedDate;
+        }
+
+        function applyWorkerFilters() {
+            const searchTerm = document.getElementById("workerSearchInput").value.trim().toLowerCase();
+            const salaryFilter = document.getElementById("workerSalaryFilter").value;
+            const dateFilter = document.getElementById("workerDateFilter").value;
+            const cityFilter = document.getElementById("workerCityFilter").value;
+
+            return getAllJobs().filter(function(job) {
+                if (searchTerm) {
+                    const searchable = [job.title, job.description, job.company, job.area, job.location].join(" ").toLowerCase();
+                    if (!searchable.includes(searchTerm)) {
+                        return false;
+                    }
+                }
+
+                if (salaryFilter) {
+                    const parts = salaryFilter.split("-");
+                    const min = parseInt(parts[0], 10);
+                    const max = parts[1] ? parseInt(parts[1].replace("+", ""), 10) : null;
+
+                    if (Number.isFinite(min)) {
+                        if (max !== null && Number.isFinite(max)) {
+                            if (job.salaryNum < min || job.salaryNum > max) {
+                                return false;
+                            }
+                        } else if (job.salaryNum < min) {
+                            return false;
+                        }
+                    }
+                }
+
+                if (!matchesDateFilter(job.date, dateFilter)) {
+                    return false;
+                }
+
+                if (cityFilter && job.location !== cityFilter) {
+                    return false;
+                }
+
+                return true;
+            });
+        }
+
+        function setVisibility(element, visible, displayValue) {
+            if (!element) {
+                return;
+            }
+
+            element.classList.toggle("hidden", !visible);
+            element.style.display = visible ? (displayValue || "") : "none";
+            element.setAttribute("aria-hidden", visible ? "false" : "true");
+        }
+
+        function showScreen(screenName) {
+            Object.keys(screenIds).forEach(function(key) {
+                const panel = document.getElementById(screenIds[key]);
+                const isActive = key === screenName;
+                setVisibility(panel, isActive, "block");
+            });
+
+            setVisibility(document.getElementById("employerRegisterForm"), screenName === "employerRegister", "grid");
+            setVisibility(document.getElementById("workerRegisterForm"), screenName === "workerRegister", "grid");
+
+            if (screenName !== "employerDashboard") {
+                setPostJobFormVisibility(false, true);
+            }
+
+            // Show/hide safety tips button based on view
+            const safetyBtn = document.querySelector('.safety-tips-btn');
+            if (safetyBtn) {
+                safetyBtn.style.display = (screenName === 'employerDashboard' || screenName === 'workerDashboard') ? 'flex' : 'none';
+            }
+
+            if (screenName === "employerDashboard") {
+                renderEmployerDashboard();
+            } else if (screenName === "workerDashboard") {
+                renderWorkerDashboard();
+            }
+        }
+
+        function clearWorkerFilters() {
+            document.getElementById("workerSearchInput").value = "";
+            document.getElementById("workerSalaryFilter").value = "";
+            document.getElementById("workerDateFilter").value = "";
+            document.getElementById("workerCityFilter").value = "";
+            renderWorkerJobs();
+            document.getElementById("workerSearchInput").focus();
+        }
+
+        function getCurrentWorkerApplications() {
+            if (!state.currentUser || state.currentUser.role !== "worker") {
+                return [];
+            }
+
+            const phone = state.currentUser.phone;
+            return state.applications
+                .filter(function(item) {
+                    return item.workerPhone === phone;
+                })
+                .sort(function(a, b) {
+                    return new Date(b.appliedAt) - new Date(a.appliedAt);
+                });
+        }
+
+        function hasWorkerApplied(jobId) {
+            if (!state.currentUser || state.currentUser.role !== "worker") {
+                return false;
+            }
+
+            return state.applications.some(function(item) {
+                return item.jobId === jobId && item.workerPhone === state.currentUser.phone;
+            });
+        }
+
+        function updateWorkerMetrics(filteredJobs) {
+            const applications = getCurrentWorkerApplications();
+            const accepted = applications.filter(function(item) {
+                return item.status === "accepted";
+            }).length;
+
+            document.getElementById("workerJobsMetric").textContent = filteredJobs.length;
+            document.getElementById("workerAppsMetric").textContent = applications.length;
+            document.getElementById("workerAcceptedMetric").textContent = accepted;
+        }
+
+        function createWorkerJobCard(job, index) {
+            const badge = getUrgencyLabel(job.urgency);
+            const applied = hasWorkerApplied(job.id);
+            const buttonText = applied ? "تم التقديم" : "قدّم الآن";
+            const disabled = applied ? "disabled" : "";
+            const userId = getUserIdFromJob(job);
+            const rating = getUserRating(userId);
+
+            return `<article class="job-card ${escapeHtml(job.urgency)}" style="--card-index:${index};">
+                <div class="job-top">
+                    <div>
+                        <h3 class="job-title">${escapeHtml(job.title)}</h3>
+                        <p class="job-company" style="cursor:pointer;" onclick="openProfileModal('${userId}', '${escapeHtml(job.company)}', 'employer')">
+                            <span style="text-decoration:underline;">${escapeHtml(job.company)}</span>
+                            ${renderVerifiedBadge(userId)}
+                            ${rating.count > 0 ? `<span class="rating-number" style="margin-inline-start:8px;">★ ${rating.average} (${rating.count})</span>` : ''}
+                        </p>
+                    </div>
+                    <span class="job-salary">${escapeHtml(job.salary)}</span>
+                </div>
+                <div class="job-meta">
+                    <span class="meta-pill">${formatLocation(job)}</span>
+                    <span class="meta-pill">${escapeHtml(job.dateLabel || getDateLabel(job.date))}</span>
+                </div>
+                <div class="job-footer-with-rating">
+                    <div class="job-card-actions">
+                        <span class="badge ${badge.className}">${badge.text}</span>
+                        <button type="button" class="report-btn" onclick="openReportModal('job', ${Number(job.id)}, 'وظيفة: ${escapeHtml(job.title)} - ${escapeHtml(job.company)}')" title="الإبلاغ عن مشكلة">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+                                <line x1="4" y1="22" x2="4" y2="15"></line>
+                            </svg>
+                            بلاغ
+                        </button>
+                    </div>
+                    <button type="button" class="apply-btn" onclick="applyToJob(${Number(job.id)})" ${disabled}>${buttonText}</button>
+                </div>
+            </article>`;
+        }
+
+        function renderWorkerMap(jobsToShow) {
+            const container = document.getElementById("workerMapContainer");
+            if (jobsToShow.length === 0) {
+                container.innerHTML = '<div class="map-label">لا توجد نتائج مطابقة حالياً</div>';
+                return;
+            }
+
+            const markers = jobsToShow.map(function(job) {
+                const coords = getLocationCoords(job.location, job.area, job.id);
+                const title = escapeHtml(job.title + " - " + formatCity(job.location));
+                return `<span class="map-marker ${escapeHtml(job.urgency)}" style="left:${coords.x}%;top:${coords.y}%;" title="${title}" aria-label="${title}"></span>`;
+            }).join("");
+
+            container.innerHTML = markers + '<div class="map-label">خريطة تقريبية لتوزيع الوظائف</div>';
+        }
+
+        function renderWorkerJobs() {
+            const container = document.getElementById("workerJobsList");
+            const filtered = applyWorkerFilters();
+            document.getElementById("workerResultsCount").textContent = filtered.length + " نتيجة";
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="empty-state">
+                    <div class="empty-state-icon">🔎</div>
+                    <p>لا توجد وظائف مطابقة حالياً.</p>
+                    <button type="button" class="ghost-btn" onclick="clearWorkerFilters()">إزالة الفلاتر</button>
+                </div>`;
+            } else {
+                container.innerHTML = filtered.map(createWorkerJobCard).join("");
+            }
+
+            updateWorkerMetrics(filtered);
+            renderWorkerMap(filtered);
+        }
+
+        function createWorkerApplicationCard(application, index) {
+            const status = getStatusMeta(application.status);
+            const snapshot = application.jobSnapshot || {};
+            const jobName = snapshot.title || "وظيفة";
+            const company = snapshot.company || "شركة غير محددة";
+            const salary = snapshot.salary || "غير محدد";
+            const location = (snapshot.area ? snapshot.area + "، " : "") + (snapshot.location ? formatCity(snapshot.location) : "غير محدد");
+
+            return `<article class="job-card my-job-card" style="--card-index:${index};">
+                <div class="job-top">
+                    <div>
+                        <h3 class="job-title">${escapeHtml(jobName)}</h3>
+                        <p class="job-company">${escapeHtml(company)}</p>
+                    </div>
+                    <span class="job-salary">${escapeHtml(salary)}</span>
+                </div>
+                <div class="job-meta">
+                    <span class="meta-pill">${escapeHtml(location)}</span>
+                    <span class="meta-pill">${toArabicDate(application.appliedAt)}</span>
+                </div>
+                <div class="job-footer">
+                    <span class="status-pill ${status.className}">${status.label}</span>
+                    <span class="muted-copy">الحالة: ${status.label}</span>
+                </div>
+            </article>`;
+        }
+
+        function renderWorkerApplications() {
+            const container = document.getElementById("workerApplicationsList");
+            const applications = getCurrentWorkerApplications();
+            document.getElementById("workerApplicationsCount").textContent = applications.length + " طلب";
+
+            if (applications.length === 0) {
+                container.innerHTML = `<div class="empty-state">
+                    <div class="empty-state-icon">📨</div>
+                    <p>لا توجد طلبات بعد. قدّم على وظيفة أولاً.</p>
+                </div>`;
+            } else {
+                container.innerHTML = applications.map(createWorkerApplicationCard).join("");
+            }
+        }
+
+        function switchWorkerTab(tabName) {
+            state.workerTab = tabName;
+
+            const tabs = Array.from(document.querySelectorAll("[data-worker-tab]"));
+            tabs.forEach(function(tab) {
+                const active = tab.dataset.workerTab === tabName;
+                tab.classList.toggle("active", active);
+                tab.setAttribute("aria-selected", active ? "true" : "false");
+                tab.setAttribute("tabindex", active ? "0" : "-1");
+            });
+
+            const jobsPanel = document.getElementById("workerJobsPanel");
+            const applicationsPanel = document.getElementById("workerApplicationsPanel");
+            const searchSection = document.getElementById("workerSearchSection");
+            const showJobs = tabName === "jobs";
+
+            jobsPanel.classList.toggle("hidden", !showJobs);
+            jobsPanel.setAttribute("aria-hidden", showJobs ? "false" : "true");
+            applicationsPanel.classList.toggle("hidden", showJobs);
+            applicationsPanel.setAttribute("aria-hidden", showJobs ? "true" : "false");
+            searchSection.classList.toggle("hidden", !showJobs);
+            searchSection.setAttribute("aria-hidden", showJobs ? "false" : "true");
+        }
+
+        function handleWorkerTabKeydown(event) {
+            const tabs = Array.from(document.querySelectorAll("[data-worker-tab]"));
+            const currentIndex = tabs.indexOf(event.currentTarget);
+            if (currentIndex === -1) {
+                return;
+            }
+
+            const isRtl = document.documentElement.getAttribute("dir") === "rtl";
+            let targetIndex = currentIndex;
+
+            if (event.key === "ArrowRight") {
+                targetIndex = isRtl ? currentIndex - 1 : currentIndex + 1;
+            } else if (event.key === "ArrowLeft") {
+                targetIndex = isRtl ? currentIndex + 1 : currentIndex - 1;
+            } else if (event.key === "Home") {
+                targetIndex = 0;
+            } else if (event.key === "End") {
+                targetIndex = tabs.length - 1;
+            } else {
+                return;
+            }
+
+            if (targetIndex < 0) {
+                targetIndex = tabs.length - 1;
+            } else if (targetIndex >= tabs.length) {
+                targetIndex = 0;
+            }
+
+            event.preventDefault();
+            tabs[targetIndex].focus();
+            switchWorkerTab(tabs[targetIndex].dataset.workerTab);
+        }
+
+        function renderWorkerDashboard() {
+            if (!state.currentUser || state.currentUser.role !== "worker") {
+                showScreen("landing");
+                return;
+            }
+
+            document.getElementById("workerWelcome").textContent = "مرحباً " + state.currentUser.name;
+            const skills = Array.isArray(state.currentUser.skills) ? state.currentUser.skills.join("، ") : "";
+            const city = formatCity(state.currentUser.city || "");
+            const experience = experienceLabels[state.currentUser.experience] || "";
+            document.getElementById("workerSubline").textContent = [skills, experience, city].filter(Boolean).join(" • ");
+
+            renderWorkerJobs();
+            renderWorkerApplications();
+            switchWorkerTab(state.workerTab);
+        }
+
+        function getEmployerJobs() {
+            if (!state.currentUser || state.currentUser.role !== "employer") {
+                return [];
+            }
+
+            return state.postedJobs
+                .filter(function(job) {
+                    return job.employerPhone === state.currentUser.phone;
+                })
+                .sort(function(a, b) {
+                    return Number(b.id) - Number(a.id);
+                });
+        }
+
+        function getApplicantsForJob(jobId) {
+            return state.applications
+                .filter(function(application) {
+                    return application.jobId === jobId;
+                })
+                .sort(function(a, b) {
+                    return new Date(b.appliedAt) - new Date(a.appliedAt);
+                });
+        }
+
+        function createApplicantCard(application) {
+            const status = getStatusMeta(application.status);
+            const skills = Array.isArray(application.workerSkills) ? application.workerSkills.join("، ") : "";
+            const acceptDisabled = application.status === "accepted" ? "disabled" : "";
+            const rejectDisabled = application.status === "rejected" ? "disabled" : "";
+
+            return `<div class="applicant-item">
+                <div class="applicant-head">
+                    <p class="applicant-name">${escapeHtml(application.workerName)}</p>
+                    <span class="status-pill ${status.className}">${status.label}</span>
+                </div>
+                <p class="applicant-meta">الهاتف: ${escapeHtml(application.workerPhone)}</p>
+                <p class="applicant-meta">المهارات: ${escapeHtml(skills || "غير محددة")}</p>
+                <p class="applicant-meta">الخبرة: ${escapeHtml(experienceLabels[application.workerExperience] || "غير محددة")} • المدينة: ${escapeHtml(formatCity(application.workerCity || ""))}</p>
+                <p class="applicant-meta">تاريخ التقديم: ${toArabicDate(application.appliedAt)}</p>
+                <div class="applicant-actions">
+                    <button type="button" class="small-btn" onclick="setApplicationStatus(${Number(application.id)}, 'accepted')" ${acceptDisabled}>قبول</button>
+                    <button type="button" class="small-btn reject" onclick="setApplicationStatus(${Number(application.id)}, 'rejected')" ${rejectDisabled}>رفض</button>
+                </div>
+            </div>`;
+        }
+
+        function createEmployerJobCard(job, index) {
+            const applicants = getApplicantsForJob(job.id);
+            const expanded = state.expandedJobId === job.id;
+            const applicantsView = applicants.length
+                ? applicants.map(createApplicantCard).join("")
+                : `<div class="empty-state">
+                    <div class="empty-state-icon">🧾</div>
+                    <p>لا يوجد متقدمون لهذه الوظيفة بعد.</p>
+                </div>`;
+            
+            const userId = getUserIdFromJob(job);
+            const rating = getUserRating(userId);
+
+            return `<article class="job-card my-job-card" style="--card-index:${index};">
+                <div class="job-top">
+                    <div>
+                        <h3 class="job-title">${escapeHtml(job.title)}</h3>
+                        <p class="job-company" style="cursor:pointer;" onclick="openProfileModal('${userId}', '${escapeHtml(job.company)}', 'employer')">
+                            <span style="text-decoration:underline;">${escapeHtml(job.company)}</span>
+                            ${renderVerifiedBadge(userId)}
+                            ${rating.count > 0 ? `<span class="rating-number" style="margin-inline-start:8px;">★ ${rating.average} (${rating.count})</span>` : ''}
+                        </p>
+                    </div>
+                    <span class="job-salary">${escapeHtml(job.salary)}</span>
+                </div>
+                <div class="job-meta">
+                    <span class="meta-pill">${formatLocation(job)}</span>
+                    <span class="meta-pill">${escapeHtml(job.dateLabel || getDateLabel(job.date))}</span>
+                </div>
+                <div class="job-footer-with-rating">
+                    <div class="job-card-actions">
+                        <span class="meta-pill">${applicants.length} متقدم</span>
+                        <button type="button" class="report-btn" onclick="openReportModal('job', ${Number(job.id)}, 'وظيفة: ${escapeHtml(job.title)} - ${escapeHtml(job.company)}')" title="الإبلاغ عن مشكلة">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+                                <line x1="4" y1="22" x2="4" y2="15"></line>
+                            </svg>
+                            بلاغ
+                        </button>
+                    </div>
+                    <button type="button" class="ghost-btn" onclick="toggleApplicants(${Number(job.id)})">${expanded ? "إخفاء المتقدمين" : "عرض المتقدمين"}</button>
+                </div>
+                ${expanded ? `<div class="applicants-panel">${applicantsView}</div>` : ""}
+            </article>`;
+        }
+
+        function renderEmployerDashboard() {
+            if (!state.currentUser || state.currentUser.role !== "employer") {
+                showScreen("landing");
+                return;
+            }
+
+            const myJobs = getEmployerJobs();
+            const myJobIds = new Set(myJobs.map(function(job) {
+                return job.id;
+            }));
+
+            const relatedApplications = state.applications.filter(function(application) {
+                return myJobIds.has(application.jobId);
+            });
+
+            const pendingCount = relatedApplications.filter(function(application) {
+                return application.status === "pending";
+            }).length;
+
+            document.getElementById("employerWelcome").textContent = "مرحباً " + state.currentUser.name;
+            const companyLabel = state.currentUser.company ? state.currentUser.company : "بدون اسم شركة";
+            document.getElementById("employerSubline").textContent = "الهاتف: " + state.currentUser.phone + " • " + companyLabel;
+            document.getElementById("employerJobsMetric").textContent = myJobs.length;
+            document.getElementById("employerPendingMetric").textContent = pendingCount;
+            document.getElementById("employerApplicantsMetric").textContent = relatedApplications.length;
+            document.getElementById("employerJobsCount").textContent = myJobs.length + " وظيفة";
+
+            const container = document.getElementById("employerJobsList");
+            if (myJobs.length === 0) {
+                container.innerHTML = `<div class="empty-state">
+                    <div class="empty-state-icon">📌</div>
+                    <p>لا توجد وظائف منشورة بعد.</p>
+                    <button type="button" class="post-job-btn" onclick="openPostJobForm()">نشر أول وظيفة</button>
+                </div>`;
+                return;
+            }
+
+            container.innerHTML = myJobs.map(createEmployerJobCard).join("");
+        }
+
+        function setPostJobFormVisibility(visible, skipFocus) {
+            const form = document.getElementById("postJobForm");
+            const toggleButton = document.getElementById("togglePostJobBtn");
+            setVisibility(form, visible, "block");
+            toggleButton.textContent = visible ? "إلغاء" : "نشر وظيفة جديدة";
+
+            if (visible && !skipFocus) {
+                document.getElementById("jobTitle").focus();
+            }
+        }
+
+        function openPostJobForm() {
+            setPostJobFormVisibility(true);
+        }
+
+        function toggleApplicants(jobId) {
+            state.expandedJobId = state.expandedJobId === jobId ? null : jobId;
+            renderEmployerDashboard();
+        }
+
+        function setApplicationStatus(applicationId, status) {
+            if (!state.currentUser || state.currentUser.role !== "employer") {
+                return;
+            }
+
+            const target = state.applications.find(function(application) {
+                return application.id === applicationId;
+            });
+
+            if (!target) {
+                return;
+            }
+
+            const ownsJob = state.postedJobs.some(function(job) {
+                return job.id === target.jobId && job.employerPhone === state.currentUser.phone;
+            });
+
+            if (!ownsJob) {
+                return;
+            }
+
+            target.status = status;
+            target.updatedAt = new Date().toISOString();
+            persistCollections();
+            renderEmployerDashboard();
+        }
+
+        function applyToJob(jobId) {
+            if (!state.currentUser || state.currentUser.role !== "worker") {
+                return;
+            }
+
+            const job = getAllJobs().find(function(item) {
+                return item.id === jobId;
+            });
+
+            if (!job) {
+                return;
+            }
+
+            if (hasWorkerApplied(jobId)) {
+                alert("لقد قمت بالتقديم على هذه الوظيفة مسبقاً.");
+                return;
+            }
+
+            state.applications.unshift({
+                id: Date.now() + Math.floor(Math.random() * 1000),
+                jobId: job.id,
+                status: "pending",
+                appliedAt: new Date().toISOString(),
+                workerName: state.currentUser.name,
+                workerPhone: state.currentUser.phone,
+                workerSkills: state.currentUser.skills || [],
+                workerExperience: state.currentUser.experience || "",
+                workerCity: state.currentUser.city || "",
+                jobSnapshot: {
+                    title: job.title,
+                    company: job.company,
+                    salary: job.salary,
+                    location: job.location,
+                    area: job.area
+                }
+            });
+
+            persistCollections();
+            renderWorkerJobs();
+            renderWorkerApplications();
+            alert("تم إرسال طلبك بنجاح.");
+        }
+
+        function logout() {
+            state.currentUser = null;
+            saveCurrentUser();
+            showScreen("landing");
+        }
+
+        function handleEmployerRegistration(event) {
+            event.preventDefault();
+
+            const name = document.getElementById("employerName").value.trim();
+            const phone = document.getElementById("employerPhone").value.trim();
+            const company = document.getElementById("employerCompany").value.trim();
+
+            if (!name || !phone) {
+                alert("الاسم ورقم الهاتف مطلوبان.");
+                return;
+            }
+
+            state.currentUser = {
+                id: Date.now(),
+                role: "employer",
+                name: name,
+                phone: phone,
+                company: company
+            };
+
+            saveCurrentUser();
+            document.getElementById("employerRegisterForm").reset();
+            showScreen("employerDashboard");
+        }
+
+        function handleWorkerRegistration(event) {
+            event.preventDefault();
+
+            const name = document.getElementById("workerFullName").value.trim();
+            const phone = document.getElementById("workerPhone").value.trim();
+            const skills = Array.from(document.getElementById("workerSkills").selectedOptions).map(function(option) {
+                return option.value;
+            }).filter(Boolean);
+            const experience = document.getElementById("workerExperience").value;
+            const city = document.getElementById("workerCity").value;
+
+            if (!name || !phone || skills.length === 0 || !experience || !city) {
+                alert("يرجى تعبئة جميع بيانات العامل المطلوبة.");
+                return;
+            }
+
+            state.currentUser = {
+                id: Date.now(),
+                role: "worker",
+                name: name,
+                phone: phone,
+                skills: skills,
+                experience: experience,
+                city: city
+            };
+
+            saveCurrentUser();
+            document.getElementById("workerRegisterForm").reset();
+            showScreen("workerDashboard");
+        }
+
+        function handlePostJob(event) {
+            event.preventDefault();
+
+            if (!state.currentUser || state.currentUser.role !== "employer") {
+                return;
+            }
+
+            const title = document.getElementById("jobTitle").value.trim();
+            const salaryText = document.getElementById("jobSalaryText").value.trim();
+            const salaryNum = parseInt(document.getElementById("jobSalaryNum").value, 10);
+            const city = document.getElementById("jobCity").value;
+            const area = document.getElementById("jobArea").value.trim();
+            const date = document.getElementById("jobDate").value;
+            const description = document.getElementById("jobDescription").value.trim();
+
+            if (!title || !salaryText || !Number.isFinite(salaryNum) || !city || !area || !date || !description) {
+                alert("يرجى إدخال كل بيانات الوظيفة بشكل صحيح.");
+                return;
+            }
+
+            const urgency = date === "today" ? "today" : "regular";
+            const company = state.currentUser.company || state.currentUser.name;
+
+            const newJob = {
+                id: Date.now() + Math.floor(Math.random() * 1000),
+                title: title,
+                company: company,
+                salary: salaryText,
+                salaryNum: salaryNum,
+                location: city,
+                area: area,
+                urgency: urgency,
+                description: description,
+                date: date,
+                dateLabel: getDateLabel(date),
+                phone: state.currentUser.phone,
+                employerPhone: state.currentUser.phone,
+                employerName: state.currentUser.name,
+                createdAt: new Date().toISOString()
+            };
+
+            state.postedJobs.unshift(newJob);
+            persistCollections();
+            document.getElementById("postJobForm").reset();
+            setPostJobFormVisibility(false, true);
+            state.expandedJobId = newJob.id;
+            renderEmployerDashboard();
+        }
+
+        function bindEvents() {
+            document.getElementById("chooseEmployerBtn").addEventListener("click", function() {
+                selectedRole = 'employer';
+                showRoleSelection();
+            });
+
+            document.getElementById("chooseWorkerBtn").addEventListener("click", function() {
+                selectedRole = 'worker';
+                showRoleSelection();
+            });
+
+            document.getElementById("employerBackBtn").addEventListener("click", function() {
+                showScreen("landing");
+            });
+
+            document.getElementById("workerBackBtn").addEventListener("click", function() {
+                showScreen("landing");
+            });
+
+            document.getElementById("employerRegisterForm").addEventListener("submit", handleEmployerRegistration);
+            document.getElementById("workerRegisterForm").addEventListener("submit", handleWorkerRegistration);
+            document.getElementById("postJobForm").addEventListener("submit", handlePostJob);
+
+            document.getElementById("employerSubmitBtn").addEventListener("click", function(event) {
+                event.preventDefault();
+                document.getElementById("employerRegisterForm").requestSubmit();
+            });
+
+            document.getElementById("workerSubmitBtn").addEventListener("click", function(event) {
+                event.preventDefault();
+                document.getElementById("workerRegisterForm").requestSubmit();
+            });
+
+            document.getElementById("postJobSubmitBtn").addEventListener("click", function(event) {
+                event.preventDefault();
+                document.getElementById("postJobForm").requestSubmit();
+            });
+
+            document.getElementById("togglePostJobBtn").addEventListener("click", function() {
+                const shouldOpen = document.getElementById("postJobForm").classList.contains("hidden");
+                setPostJobFormVisibility(shouldOpen);
+            });
+
+            document.getElementById("employerLogoutBtn").addEventListener("click", logout);
+            document.getElementById("workerLogoutBtn").addEventListener("click", logout);
+
+            document.getElementById("workerTabJobs").addEventListener("click", function() {
+                switchWorkerTab("jobs");
+            });
+
+            document.getElementById("workerTabApplications").addEventListener("click", function() {
+                switchWorkerTab("applications");
+            });
+
+            document.getElementById("workerTabJobs").addEventListener("keydown", handleWorkerTabKeydown);
+            document.getElementById("workerTabApplications").addEventListener("keydown", handleWorkerTabKeydown);
+
+            document.getElementById("workerSearchInput").addEventListener("input", renderWorkerJobs);
+            document.getElementById("workerSalaryFilter").addEventListener("change", renderWorkerJobs);
+            document.getElementById("workerDateFilter").addEventListener("change", renderWorkerJobs);
+            document.getElementById("workerCityFilter").addEventListener("change", renderWorkerJobs);
+            document.getElementById("workerClearFiltersBtn").addEventListener("click", clearWorkerFilters);
+        }
+
+        function restoreSession() {
+            // Check if user is already logged in from previous session
+            if (state.currentUser && state.currentUser.role === "employer") {
+                showScreen("employerDashboard");
+            } else if (state.currentUser && state.currentUser.role === "worker") {
+                showScreen("workerDashboard");
+            } else {
+                // Check for saved profile from onboarding
+                const savedProfile = localStorage.getItem('khedma.userProfile');
+                if (savedProfile) {
+                    const profile = JSON.parse(savedProfile);
+                    if (profile.role && profile.name && profile.phone && profile.city) {
+                        completeRegistration(profile);
+                        return;
+                    }
+                }
+                showScreen("landing");
+            }
+        }
+
+        window.applyToJob = applyToJob;
+        window.setApplicationStatus = setApplicationStatus;
+        window.toggleApplicants = toggleApplicants;
+        window.openPostJobForm = openPostJobForm;
+        window.clearWorkerFilters = clearWorkerFilters;
+        
+        // Onboarding functions
+        window.skipOnboarding = skipOnboarding;
+        window.nextOnboardingSlide = nextOnboardingSlide;
+        window.selectRole = selectRole;
+        window.saveProfile = saveProfile;
+        window.skipSkills = skipSkills;
+        window.saveSkills = saveSkills;
+        
+        // Trust & Safety
+        window.openReportModal = openReportModal;
+        window.closeReportModal = closeReportModal;
+        window.submitReport = submitReport;
+        window.openSafetyModal = openSafetyModal;
+        window.closeSafetyModal = closeSafetyModal;
+        window.openProfileModal = openProfileModal;
+        window.closeProfileModal = closeProfileModal;
+        window.submitRating = submitRating;
+
+        bindEvents();
+        // restoreSession is called by checkOnboarding after onboarding completes
+        initLandingEffects();
+    </script>
+</body>
+</html>
