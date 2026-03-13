@@ -7,7 +7,7 @@
   {#each CATEGORIES as cat}
     <button 
       class="category-pill {$selectedCategory === cat.id ? 'active' : ''}"
-      on:click={() => selectedCategory.set(cat.id)}
+      onclick={() => selectedCategory.set(cat.id)}
     >
       {cat.ar}
     </button>

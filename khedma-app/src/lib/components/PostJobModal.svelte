@@ -2,14 +2,13 @@
   import { showPostModal, addToast } from '$lib/stores';
   import { CATEGORIES, CITIES } from '$lib/constants';
   import { jobs } from '$lib/stores/jobs';
-  import { get } from 'svelte/store';
 
-  let title = '';
-  let description = '';
-  let city = 'casablanca';
-  let category = 'cleaning';
-  let price = '';
-  let urgency = 'regular';
+  let title = $state('');
+  let description = $state('');
+  let city = $state('casablanca');
+  let category = $state('cleaning');
+  let price = $state('');
+  let urgency = $state('regular');
 
   function close() {
     showPostModal.set(false);
@@ -51,14 +50,14 @@
 </script>
 
 {#if $showPostModal}
-  <div class="modal-overlay" on:click={close} on:keypress={() => {}} role="button" tabindex="0">
-    <div class="modal-content" on:click|stopPropagation on:keypress={() => {}} role="dialog">
+  <div class="modal-overlay" onclick={close} onkeypress={() => {}} role="button" tabindex="0">
+    <div class="modal-content" onclick={(e) => e.stopPropagation()} onkeypress={() => {}} role="dialog" tabindex="-1">
       <div class="modal-header">
         <h2>انشر وظيفة جديدة</h2>
-        <button class="close-btn" on:click={close}>×</button>
+        <button class="close-btn" onclick={close}>×</button>
       </div>
       
-      <form class="post-form" on:submit={handleSubmit}>
+      <form class="post-form" onsubmit={handleSubmit}>
         <div class="form-group">
           <label for="title">عنوان الوظيفة *</label>
           <input 
@@ -113,7 +112,7 @@
           
           <div class="form-group">
             <label for="urgency">السرعة</label>
-            <select id="urgent" bind:value={urgency}>
+            <select id="urgency" bind:value={urgency}>
               <option value="urgent">عاجل</option>
               <option value="today">اليوم</option>
               <option value="regular">منتظم</option>

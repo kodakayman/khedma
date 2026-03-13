@@ -10,7 +10,7 @@
       <div class="header-eyebrow">KHEDMA</div>
       <h1 class="header-title">أفضل العمال في مدينتك</h1>
     </div>
-    <button class="btn-primary" on:click={() => showPostModal.set(true)}>
+    <button class="btn-primary" onclick={() => showPostModal.set(true)}>
       + انشر وظيفة
     </button>
   </header>
