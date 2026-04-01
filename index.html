@@ -2185,18 +2185,31 @@
         }
 
         .onboarding-skip {
-            background: none;
-            border: none;
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 14px;
-            font-weight: 600;
+            background: #fff;
+            border: 1px solid rgba(12, 31, 47, 0.18);
+            color: #0c1f2f;
+            font-size: 18px;
+            font-weight: 800;
             cursor: pointer;
-            padding: 8px 16px;
-            transition: color 0.2s ease;
+            padding: 12px 22px;
+            border-radius: 12px;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+            pointer-events: auto;
         }
 
         .onboarding-skip:hover {
-            color: #fff;
+            background: #f3f6f9;
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.28);
+        }
+
+        .onboarding-skip-floating {
+            position: fixed;
+            top: 16px;
+            inset-inline-end: 16px;
+            z-index: 2010;
+            min-width: 96px;
         }
 
         .onboarding-next {
@@ -2649,6 +2662,16 @@
                 width: 80px;
                 height: 80px;
                 font-size: 38px;
+            }
+
+            .onboarding-skip {
+                font-size: 17px;
+                padding: 11px 18px;
+            }
+
+            .onboarding-skip-floating {
+                top: 12px;
+                inset-inline-end: 12px;
             }
             
             .skills-grid {
@@ -3393,6 +3416,7 @@
 
     <!-- Onboarding Welcome Screens -->
 <div class="onboarding-overlay" id="onboardingOverlay" onclick="handleOnboardingOverlayClick(event)">
+        <button type="button" class="onboarding-skip onboarding-skip-floating" onclick="skipOnboarding(event)" aria-label="تخطي onboarding">تخطي</button>
         <div class="onboarding-container">
             <div class="onboarding-progress">
                 <span class="onboarding-dot active" data-slide="0"></span>
@@ -3634,13 +3658,14 @@
         }
 
         function handleOnboardingOverlayClick(event) {
-            if (event.target !== event.currentTarget) return;
-            skipOnboarding();
+            if (event.target.closest('.onboarding-next')) return;
+            skipOnboarding(event);
         }
         
         function skipOnboarding(event) {
             if (event) {
                 event.preventDefault();
+                event.stopPropagation();
             }
 
             localStorage.setItem(ONBOARDING_KEY, 'true');
