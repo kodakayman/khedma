@@ -171,7 +171,7 @@
                 phone: phone,
                 role: selectedRole || 'seeker',
                 skills: selectedSkills,
-                district: district,
+                district: district || "وسط المدينة",
                 bio: '',
                 rating: 4.8,
                 verified: true,
@@ -366,11 +366,20 @@
             const day = 24 * hour;
 
             const defaultJobs = [
-                {id:1,title:'🧹 تنظيف شقة 3 غرف',desc:'شقة في الحي الحسني. تحتاج تنظيف كامل.',district:'الحي الحسني',category:'تنظيف',priceMin:250,priceMax:350,views:145,applicants:8,postedAt: now - 2 * hour},
-                {id:2,title:'📦 نقل أثاث',desc:'نقل أثاث من شقة لدور ثالث.',district:'الماركيه',category:'نقل',priceMin:200,priceMax:300,views:78,applicants:4,postedAt: now - 5 * hour},
-                {id:3,title:'🚿 إصلاح تسرب مياه',desc:'أنبوب المطبخ يسرب.',district:'عين السبع',category:'سباكة',priceMin:200,priceMax:400,views:234,applicants:12,postedAt: now - hour},
-                {id:4,title:'⚡ تركيب ثلاجة',desc:'تركيب ثلاجة جديدة.',district:'بوسكورة',category:'كهرباء',priceMin:300,priceMax:450,views:56,applicants:3,postedAt: now - day},
-                {id:5,title:'🎨 دهان غرفة',desc:'دهان غرفة نوم.',district:'الماركيه',category:'دهان',priceMin:400,priceMax:600,views:34,applicants:2,postedAt: now - 2 * day},
+            {id:1,title:'🧹 تنظيف شقة كبيرة',desc:'شقة 4 غرف في الباريو. تنظيف كامل مع غسيل سجاد.',district:'الباريو',category:'تنظيف',priceMin:300,priceMax:450,views:89,applicants:5,postedAt: now - hour},
+            {id:2,title:'📦 نقل أثاث منزل',desc:'نقل أثاث من منزل قديم. أثاث ثقيل يتطلب 2 عمال.',district:'وسط المدينة',category:'نقل',priceMin:400,priceMax:600,views:156,applicants:8,postedAt: now - 2*hour},
+            {id:3,title:'🚿 إصلاح صنوبر shower',desc:'صنوبرة الحمام تسرب ماء. إصلاح عاجل مطلوب.',district:'العلالي',category:'سباكة',priceMin:150,priceMax:300,views:234,applicants:12,postedAt: now - hour},
+            {id:4,title:'⚡ تركيب مروحة سقف',desc:'تركيب مروحة سقف في غرفة النوم.',district:'كد يا',category:'كهرباء',priceMin:100,priceMax:150,views:45,applicants:3,postedAt: now - day},
+            {id:5,title:'🎨 دهان صالون',desc:'دهان صالون حديث业务流程 40م. لون beige.',district:'مرتيل',category:'دهان',priceMin:800,priceMax:1200,views:67,applicants:4,postedAt: now - 2*day},
+            {id:6,title:'🚪 تركيب باب خشبي',desc:'تركيب باب غرف نوم جديد.',district:'الميناء',category:'نجارة',priceMin:200,priceMax:350,views:34,applicants:2,postedAt: now - 3*day},
+            {id:7,title:'❄️ صيانة تكييف',desc:'تكييف شباك لا يبرد. تحتاج صيانة.',district:'الوازيس',category:'تبريد',priceMin:200,priceMax:400,views:89,applicants:6,postedAt: now - day},
+        ];
+// REMOVED: const defaultJobs = [
+                {id:1,title:'🧹 تنظيف شقة 3 غرف',desc:'شقة في الحي الحسني. تحتاج تنظيف كامل.',district:'الباريو',category:'تنظيف',priceMin:250,priceMax:350,views:145,applicants:8,postedAt: now - 2 * hour},
+                {id:2,title:'📦 نقل أثاث',desc:'نقل أثاث من شقة لدور ثالث.',district:'وسط المدينة',category:'نقل',priceMin:200,priceMax:300,views:78,applicants:4,postedAt: now - 5 * hour},
+                {id:3,title:'🚿 إصلاح تسرب مياه',desc:'أنبوب المطبخ يسرب.',district:'العلالي',category:'سباكة',priceMin:200,priceMax:400,views:234,applicants:12,postedAt: now - hour},
+                {id:4,title:'⚡ تركيب ثلاجة',desc:'تركيب ثلاجة جديدة.',district:'كد يا',category:'كهرباء',priceMin:300,priceMax:450,views:56,applicants:3,postedAt: now - day},
+                {id:5,title:'🎨 دهان غرفة',desc:'دهان غرفة نوم.',district:'وسط المدينة',category:'دهان',priceMin:400,priceMax:600,views:34,applicants:2,postedAt: now - 2 * day},
             ];
 
             const existingIds = new Set(defaultJobs.map(j => j.id));
@@ -381,6 +390,15 @@
         initData();
 
         const workers = [
+            {id:1,name:'عبد الكريم',skill:'تنظيف',rating:4.9,jobs:234,phone:'+212661234567',district:'الباريو'},
+            {id:2,name:'سعيد',skill:'نقل',rating:4.8,jobs:189,phone:'+212671234567',district:'وسط المدينة'},
+            {id:3,name:'يونس',skill:'سباكة',rating:4.7,jobs:145,phone:'+212681234567',district:'العلالي'},
+            {id:4,name:'حكيم',skill:'كهرباء',rating:4.9,jobs:98,phone:'+212691234567',district:'كد يا'},
+            {id:5,name:'رشيد',skill:'دهان',rating:4.8,jobs:167,phone:'+212661334567',district:'مرتيل'},
+            {id:6,name:'أمين',skill:'نجارة',rating:4.6,jobs:76,phone:'+212671334567',district:'الميناء'},
+            {id:7,name:'عمر',skill:'تبريد',rating:4.7,jobs:112,phone:'+212681334567',district:'الوازيس'},
+        ];
+// REMOVED: const workers = [
             {id:1,name:'أحمد',skill:'سباكة',rating:4.9,jobs:145,phone:'+212612345678'},
             {id:2,name:'فاطمة',skill:'تنظيف',rating:4.8,jobs:234,phone:'+212661234567'},
             {id:3,name:'يوسف',skill:'نقل',rating:4.7,jobs:89,phone:'+212671345678'},
