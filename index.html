@@ -4615,8 +4615,10 @@
 
             if (screenName === "employerDashboard") {
                 renderEmployerDashboard();
+            updateEmployerAnalytics();
             } else if (screenName === "workerDashboard") {
                 renderWorkerDashboard();
+            updateWorkerAnalytics();
             }
         }
 
@@ -4684,6 +4686,7 @@
                         </p>
                     </div>
                     <span class="job-salary">${escapeHtml(job.salary)}</span>
+                    <span class="insurance-badge">🛡️ مؤمّن</span>
                 </div>
                 <div class="job-meta">
                     <span class="meta-pill">${formatLocation(job)}</span>
@@ -4895,9 +4898,9 @@
                 <p class="applicant-meta">المهارات: ${escapeHtml(skills || "غير محددة")}</p>
                 <p class="applicant-meta">الخبرة: ${escapeHtml(experienceLabels[application.workerExperience] || "غير محددة")} • المدينة: ${escapeHtml(formatCity(application.workerCity || ""))}</p>
                 <p class="applicant-meta">تاريخ التقديم: ${toArabicDate(application.appliedAt)}</p>
-                <div class="applicant-actions">
-                    <button type="button" class="small-btn" onclick="setApplicationStatus(${Number(application.id)}, 'accepted')" ${acceptDisabled}>قبول</button>
+                <div class="applicant-actions"><button type="button" class="small-btn" onclick="setApplicationStatus(${Number(application.id)}, 'accepted')" ${acceptDisabled}>قبول</button>
                     <button type="button" class="small-btn reject" onclick="setApplicationStatus(${Number(application.id)}, 'rejected')" ${rejectDisabled}>رفض</button>
+                    <button type="button" class="small-btn complete-btn" onclick="completeShift(\${Number(application.id)})" \${application.status === 'accepted' ? '' : 'disabled'}>إكمال الشيفت</button>
                 </div>
             </div>`;
         }
@@ -4926,6 +4929,7 @@
                         </p>
                     </div>
                     <span class="job-salary">${escapeHtml(job.salary)}</span>
+                    <span class="insurance-badge">🛡️ مؤمّن</span>
                 </div>
                 <div class="job-meta">
                     <span class="meta-pill">${formatLocation(job)}</span>
@@ -5006,9 +5010,42 @@
         function toggleApplicants(jobId) {
             state.expandedJobId = state.expandedJobId === jobId ? null : jobId;
             renderEmployerDashboard();
+            updateEmployerAnalytics();
         }
 
+        // Analytics update functions
+        function updateEmployerAnalytics() {
+            const myJobs = getEmployerJobs();
+            const relatedApps = [];
+            myJobs.forEach(function(job) {
+                state.applications.forEach(function(app) {
+                    if (app.jobId === job.id) relatedApps.push(app);
+                });
+            });
+            const accepted = relatedApps.filter(function(a) { return a.status === "accepted"; }).length;
+            const completed = relatedApps.filter(function(a) { return a.status === "completed"; }).length;
+            const rate = relatedApps.length > 0 ? Math.round((completed / relatedApps.length) * 100) : 0;
+            if(document.getElementById("employerAcceptedAnalyticsMetric")) document.getElementById("employerAcceptedAnalyticsMetric").textContent = accepted;
+            if(document.getElementById("employerCompletedAnalyticsMetric")) document.getElementById("employerCompletedAnalyticsMetric").textContent = completed;
+            if(document.getElementById("employerCompletionRateMetric")) document.getElementById("employerCompletionRateMetric").textContent = rate + "%";
+        }
+
+        function updateWorkerAnalytics() {
+            const apps = getCurrentWorkerApplications();
+            const pending = apps.filter(function(a) { return a.status === "pending"; }).length;
+            const completed = apps.filter(function(a) { return a.status === "completed"; }).length;
+            const rate = apps.length > 0 ? Math.round((completed / apps.length) * 100) : 0;
+            if(document.getElementById("workerPendingAnalyticsMetric")) document.getElementById("workerPendingAnalyticsMetric").textContent = pending;
+            if(document.getElementById("workerCompletedAnalyticsMetric")) document.getElementById("workerCompletedAnalyticsMetric").textContent = completed;
+            if(document.getElementById("workerSuccessRateMetric")) document.getElementById("workerSuccessRateMetric").textContent = rate + "%";
+        }
+
+        function completeShift(appId) { setApplicationStatus(appId, "completed"); }
+
         function setApplicationStatus(applicationId, status) {
+        // Update analytics after status change
+        if (typeof updateEmployerAnalytics === "function") updateEmployerAnalytics();
+        if (typeof updateWorkerAnalytics === "function") updateWorkerAnalytics();
         // Update analytics after status change
         updateEmployerAnalytics();
         updateWorkerAnalytics();
@@ -5036,6 +5073,7 @@
             target.updatedAt = new Date().toISOString();
             persistCollections();
             renderEmployerDashboard();
+            updateEmployerAnalytics();
         }
 
         function applyToJob(jobId) {
@@ -5190,6 +5228,7 @@
             setPostJobFormVisibility(false, true);
             state.expandedJobId = newJob.id;
             renderEmployerDashboard();
+            updateEmployerAnalytics();
         }
 
         function bindEvents() {
