@@ -2259,9 +2259,36 @@
             border-radius: 24px;
             padding: 32px 24px;
             text-align: center;
+            position: relative;
             transform: translateY(20px) scale(0.95);
             transition: transform 0.3s ease;
             box-shadow: 0 24px 48px rgba(10, 35, 60, 0.35);
+        }
+
+        .role-selection-close {
+            position: absolute;
+            top: 12px;
+            inset-inline-end: 12px;
+            border: 1px solid var(--border);
+            background: var(--surface-muted);
+            color: var(--text-muted);
+            border-radius: 999px;
+            padding: 7px 12px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .role-selection-close:hover {
+            border-color: #bfd5ec;
+            background: var(--primary-soft);
+            color: var(--primary-strong);
+        }
+
+        .role-selection-close:focus-visible {
+            outline: 3px solid var(--ring);
+            outline-offset: 2px;
         }
 
         .role-selection-overlay.active .role-selection-modal {
@@ -2996,7 +3023,7 @@
                 <footer class="landing-footer reveal-section" style="--reveal-delay: 200ms;">
                     <p class="landing-footer-copy">Copyright 2026 KHEDMA</p>
                     <nav class="landing-footer-links" aria-label="روابط التذييل">
-                        <a href="#" onclick="localStorage.removeItem('khedma.onboardingComplete'); localStorage.removeItem('khedma.userProfile'); location.reload(); return false;">إعادة التجربة</a>
+                        <a href="#" onclick="localStorage.removeItem('khedma.onboardingComplete'); localStorage.removeItem('khedma.userProfile'); localStorage.removeItem('khedma.roleSelectionSkipped'); location.reload(); return false;">إعادة التجربة</a>
                         <a href="#">من نحن</a>
                         <a href="#">تواصل معنا</a>
                     </nav>
@@ -3450,8 +3477,9 @@
     </div>
 
     <!-- Role Selection Modal -->
-    <div class="role-selection-overlay" id="roleSelectionOverlay">
+    <div class="role-selection-overlay" id="roleSelectionOverlay" onclick="handleRoleSelectionOverlayClick(event)">
         <div class="role-selection-modal">
+            <button type="button" class="role-selection-close" onclick="skipRoleSelection(event)" aria-label="تخطي اختيار الدور">تخطي</button>
             <h2 class="role-selection-title">اختر دورك</h2>
             <p class="role-selection-sub">هل أنت ناشر وظائف أم عامل يبحث عن عمل؟</p>
             <div class="role-options">
@@ -3593,6 +3621,7 @@
     <script>
         // Onboarding State
         const ONBOARDING_KEY = "khedma.onboardingComplete";
+        const ROLE_SELECTION_SKIPPED_KEY = "khedma.roleSelectionSkipped";
         let currentOnboardingSlide = 0;
         let selectedRole = null;
         let onboardingTouchStartX = null;
@@ -3740,13 +3769,30 @@
         function showRoleSelection() {
             document.getElementById('roleSelectionOverlay').classList.add('active');
         }
-        
+
         function hideRoleSelection() {
             document.getElementById('roleSelectionOverlay').classList.remove('active');
         }
-        
+
+        function handleRoleSelectionOverlayClick(event) {
+            if (event.target !== event.currentTarget) return;
+            skipRoleSelection(event);
+        }
+
+        function skipRoleSelection(event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            localStorage.setItem(ROLE_SELECTION_SKIPPED_KEY, 'true');
+            hideRoleSelection();
+            restoreSession();
+        }
+
         function selectRole(role) {
             selectedRole = role;
+            localStorage.removeItem(ROLE_SELECTION_SKIPPED_KEY);
             hideRoleSelection();
             showProfileCompletion();
         }
@@ -3842,17 +3888,27 @@
         
         function checkProfileCompletion() {
             const profileData = localStorage.getItem('khedma.userProfile');
+            const roleSelectionSkipped = localStorage.getItem(ROLE_SELECTION_SKIPPED_KEY) === 'true';
             if (!profileData) {
+                if (roleSelectionSkipped) {
+                    restoreSession();
+                    return;
+                }
                 showRoleSelection();
                 return;
             }
-            
+
             const profile = JSON.parse(profileData);
             if (!profile.role || !profile.name || !profile.phone || !profile.city) {
+                if (roleSelectionSkipped) {
+                    restoreSession();
+                    return;
+                }
                 showRoleSelection();
                 return;
             }
-            
+
+            localStorage.removeItem(ROLE_SELECTION_SKIPPED_KEY);
             // Profile complete, continue to app
             // Restore user session if exists
             restoreSession();
@@ -5366,6 +5422,8 @@
         // Onboarding functions
         window.skipOnboarding = skipOnboarding;
         window.nextOnboardingSlide = nextOnboardingSlide;
+        window.handleRoleSelectionOverlayClick = handleRoleSelectionOverlayClick;
+        window.skipRoleSelection = skipRoleSelection;
         window.selectRole = selectRole;
         window.saveProfile = saveProfile;
         window.skipSkills = skipSkills;
