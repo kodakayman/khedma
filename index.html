@@ -3392,10 +3392,7 @@
     <button type="button" class="safety-tips-btn" onclick="openSafetyModal()" title="نصائح السلامة" style="display:none;">🛡️</button>
 
     <!-- Onboarding Welcome Screens -->
-    <button class="onboarding-skip-btn" onclick="skipOnboarding()" style="position:absolute;top:20px;left:20px;z-index:9999;background:#fff;border:1px solid #ddd;padding:8px 16px;border-radius:20px;cursor:pointer;">
-   تخطي ››
-</button>
-<div class="onboarding-overlay" id="onboardingOverlay">
+<div class="onboarding-overlay" id="onboardingOverlay" onclick="handleOnboardingOverlayClick(event)">
         <div class="onboarding-container">
             <div class="onboarding-progress">
                 <span class="onboarding-dot active" data-slide="0"></span>
@@ -3422,7 +3419,7 @@
             </div>
             
             <div class="onboarding-nav">
-                <button type="button" class="onboarding-skip" onclick="skipOnboarding()">Skip</button>
+                <button type="button" class="onboarding-skip" onclick="skipOnboarding(event)">تخطي</button>
                 <button type="button" class="onboarding-next" onclick="nextOnboardingSlide()" id="onboardingNextBtn">Next</button>
             </div>
         </div>
@@ -3629,11 +3626,26 @@
                 finishOnboarding();
             }
         }
+
+        function closeOnboardingOverlay() {
+            const onboardingOverlay = document.getElementById('onboardingOverlay');
+            if (!onboardingOverlay) return;
+            onboardingOverlay.classList.remove('active');
+        }
+
+        function handleOnboardingOverlayClick(event) {
+            if (event.target !== event.currentTarget) return;
+            skipOnboarding();
+        }
         
-        function skipOnboarding() {
-        document.getElementById('onboardingOverlay').classList.remove('active');
-        document.getElementById('roleSelectionOverlay').classList.remove('active');
-            finishOnboarding();
+        function skipOnboarding(event) {
+            if (event) {
+                event.preventDefault();
+            }
+
+            localStorage.setItem(ONBOARDING_KEY, 'true');
+            closeOnboardingOverlay();
+            hideRoleSelection();
         }
 
         // Swipe support for onboarding
@@ -3696,7 +3708,7 @@
         
         function finishOnboarding() {
             localStorage.setItem(ONBOARDING_KEY, 'true');
-            document.getElementById('onboardingOverlay').classList.remove('active');
+            closeOnboardingOverlay();
             showRoleSelection();
         }
         
