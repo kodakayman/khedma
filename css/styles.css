@@ -1557,3 +1557,30 @@
     color: #0f766e;
     font-weight: 600;
 }
+
+/* Fix jammed form controls */
+.form-grid {
+    gap: 16px !important;
+}
+.form-grid .input-field,
+.form-grid select {
+    margin-bottom: 8px;
+}
+.form-grid label {
+    margin-bottom: 4px;
+    display: block;
+}
+.filter-select,
+.filter-select + * {
+    margin-top: 8px;
+}
+/* Fix testimonials heading */
+.landing-heading {
+    font-size: 1.4rem !important;
+    margin-bottom: 16px !important;
+}
+/* Fix empty state styling */
+.stat-number:empty,
+.stat-number:--empty {
+    opacity: 0.5;
+}
