@@ -3057,6 +3057,15 @@
                         </div>
                         <div class="field-group">
                             <label for="jobCity">المدينة</label>
+                            <select id="jobIndustry" class="input-field" required>
+                                <option value="">اختر المجال</option>
+                                <option value="hospitality">ضيافة (مطاعم، كافيهات)</option>
+                                <option value="logistics">لوجستيك (مستودعات، توصيل)</option>
+                                <option value="retail">تجزئة (محلات، سوبرماركت)</option>
+                                <option value="service">خدمات (تنظيف، صيانة)</option>
+                                <option value="events">فعاليات ومعارض</option>
+                                <option value="construction">بناء وتشطيب</option>
+                            </select>
                             <select id="jobCity" class="input-field" required>
                                 <option value="">اختر المدينة</option>
                                 <option value="Rabat">الرباط</option>
@@ -3083,6 +3092,10 @@
                         </div>
                     </div>
                     <div class="auth-actions">
+                        <label class="auto-accept-toggle">
+                            <input type="checkbox" id="autoAcceptToggle">
+                            <span>✓ قبول تلقائي للعمال المعتمدين</span>
+                        </label>
                         <button type="submit" class="post-job-btn" id="postJobSubmitBtn">نشر الوظيفة</button>
                     </div>
                 </form>
