@@ -529,6 +529,9 @@
                     <div class="job-pay">💰 ${job.priceMin} - ${job.priceMax} درهما</div>
                     <div class="job-stats"><span><i class="fas fa-eye"></i> ${job.views}</span><span><i class="fas fa-users"></i> ${job.applicants}</span></div>
                     <div class="job-actions">
+                        <button class="btn btn-whatsapp" onclick="event.stopPropagation(); applyJob('${escapedTitle}',${job.priceMin})">
+                            <i class="fab fa-whatsapp"></i> تقديم
+                        </button>
                         <div class="engagement-actions">
                             <button type="button" class="icon-btn alert ${alerted ? 'active' : ''}" onclick="event.stopPropagation(); enableJobAlert(${job.id})" title="تنبيهات الوظيفة">
                                 <i class="fas fa-bell"></i>
@@ -1366,10 +1369,39 @@
         }
         
 
-        // ========== INITIALIZATION ==========
+        // City Selector
+const cities = {
+    'tangier': { name: 'طنجة', ar: 'طنجة', districts: ['وسط المدينة', 'الباريو', 'العلالي', 'كد يا', 'مرتيل'] },
+    'marrakech': { name: 'مراكش', ar: 'مراكش', districts: ['وسط المدينة', ' Gueliz', 'الأوداية', 'الطريق القديمة'] },
+    'casablanca': { name: 'الدار البيضاء', ar: 'الدار البيضاء', districts: ['الماركيه', 'الحي الحسني', 'عين السبع'] },
+    'rabat': { name: 'الرباط', ar: 'الرباط', districts: ['وسط المدينة', 'ال أكد', 'السوحي'] }
+};
+
+let currentCity = 'tangier';
+
+function showCitySelector() {
+    const cityNames = Object.values(cities).map(c => `<button class="city-btn" onclick="selectCity('${c.name.toLowerCase()}')">${c.name}</button>`).join('');
+    showToast('�Cities: ' + cityNames, 5000);
+}
+
+function selectCity(city) {
+    currentCity = city;
+    document.getElementById('currentCity').textContent = '| ' + cities[city].name;
+    initData(); // Reload jobs for city
+    renderJobs();
+    showToast('تم التحويل إلى ' + cities[city].ar, 2000);
+}
+
+// ========== INITIALIZATION ==========
         function init() {
+    // Initialize data and render
     initData();
     checkOnboarding();
     renderJobs();
+    
+    // Update header stats
+    setTotalJobsCount(jobs.length);
+    document.getElementById('activeJobs').textContent = jobs.length;
+    document.getElementById('totalWorkers').textContent = workers.length;
 }
 document.addEventListener("DOMContentLoaded", init);

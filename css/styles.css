@@ -1487,3 +1487,20 @@
             .fab { right: calc(50% - 340px); }
             .workers-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
         }
+
+.city-btn {
+    padding: 8px 16px;
+    margin: 4px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.btn-whatsapp {
+    background: #25D366 !important;
+    color: white !important;
+}
+.btn-whatsapp:hover {
+    background: #1FAE57 !important;
+}
