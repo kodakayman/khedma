@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KHEDMA nearby - منصة وظائف</title>
+    <title>KHEDMA - منصة وظائف</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Lexend:wght@500;600;700&display=swap" rel="stylesheet">
@@ -599,20 +599,6 @@
         .badge.regular {
             background: var(--regular-bg);
             color: var(--regular);
-        }
-
-        .insurance-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 5px 10px;
-            border-radius: 999px;
-            border: 1px solid rgba(37, 211, 102, 0.35);
-            background: var(--primary-soft);
-            color: var(--primary-strong);
-            font-size: 11px;
-            font-weight: 800;
-            white-space: nowrap;
         }
 
         .job-action {
@@ -2855,6 +2841,7 @@
             }
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <div class="app-shell">
@@ -2876,7 +2863,7 @@
                             <div class="phone-notch"></div>
                             <div class="phone-screen">
                                 <div class="phone-top">
-                                    <span class="phone-brand">KHEDMA APP</span>
+                                    <span class="phone-brand">تطبيق KHEDMA</span>
                                     <span class="phone-dot"></span>
                                 </div>
                                 <div class="phone-job">
@@ -2887,7 +2874,7 @@
                                     <strong>عامل بناء</strong>
                                     <span>الرباط • اليوم</span>
                                 </div>
-                                <span class="phone-pill">تواصل مباشر عبر WhatsApp</span>
+                                <span class="phone-pill">تواصل مباشر عبر واتساب</span>
                             </div>
                         </div>
                     </div>
@@ -2917,7 +2904,7 @@
                                     <path d="M8 17h8"></path>
                                 </svg>
                             </span>
-                            <h3 class="landing-card-title">ابحث أو PUBLISH</h3>
+                            <h3 class="landing-card-title">ابحث أو انشر</h3>
                             <p class="landing-card-copy">انشر وظائفك أو ابحث عن عمل مناسب حسب المدينة والمهارة.</p>
                         </article>
                         <article class="landing-card-item">
@@ -2930,7 +2917,7 @@
                                 </svg>
                             </span>
                             <h3 class="landing-card-title">تواصل ووظف</h3>
-                            <p class="landing-card-copy">تواصل مباشرة عبر WhatsApp مع الطرف المناسب وابدأ العمل فوراً.</p>
+                            <p class="landing-card-copy">تواصل مباشرة عبر واتساب مع الطرف المناسب وابدأ العمل فوراً.</p>
                         </article>
                     </div>
                 </section>
@@ -2956,7 +2943,7 @@
                                     <path d="M8 12h3"></path>
                                 </svg>
                             </span>
-                            <h3 class="landing-card-title">WhatsApp مباشر</h3>
+                            <h3 class="landing-card-title">واتساب مباشر</h3>
                             <p class="landing-card-copy">بدون وسيط، تواصل مباشر وسريع بين الطرفين.</p>
                         </article>
                         <article class="landing-card-item">
@@ -2987,15 +2974,15 @@
                     <p class="stats-subline">نمو متواصل في الفرص والعمال عبر مدن المغرب.</p>
                     <div class="stats-grid">
                         <article class="stat-item">
-                            <strong class="stat-number" data-target="500" data-suffix="+">0</strong>
+                            <strong class="stat-number" data-target="50" data-suffix="+">0</strong>
                             <span class="stat-label">وظيفة</span>
                         </article>
                         <article class="stat-item">
-                            <strong class="stat-number" data-target="200" data-suffix="+">0</strong>
+                            <strong class="stat-number" data-target="20" data-suffix="+">0</strong>
                             <span class="stat-label">عامل</span>
                         </article>
                         <article class="stat-item">
-                            <strong class="stat-number" data-target="50" data-suffix="+">0</strong>
+                            <strong class="stat-number" data-target="10" data-suffix="+">0</strong>
                             <span class="stat-label">مدينة</span>
                         </article>
                     </div>
@@ -3010,7 +2997,7 @@
                             <p class="testimonial-author">مبارك - صاحب ورشة نجارة</p>
                         </article>
                         <article class="testimonial">
-                            <blockquote>"أنا سمية من الرباط، توصلت مع 3 أصحاب عمل مباشرة عبر WhatsApp خلال يومين."</blockquote>
+                            <blockquote>"أنا سمية من الرباط، توصلت مع 3 أصحاب عمل مباشرة عبر واتساب خلال يومين."</blockquote>
                             <p class="testimonial-author">سمية - عاملة تشطيب</p>
                         </article>
                         <article class="testimonial">
@@ -3021,7 +3008,7 @@
                 </section>
 
                 <footer class="landing-footer reveal-section" style="--reveal-delay: 200ms;">
-                    <p class="landing-footer-copy">Copyright 2026 KHEDMA</p>
+                    <p class="landing-footer-copy">جميع الحقوق محفوظة 2026 KHEDMA</p>
                     <nav class="landing-footer-links" aria-label="روابط التذييل">
                         <a href="#" onclick="localStorage.removeItem('khedma.onboardingComplete'); localStorage.removeItem('khedma.userProfile'); localStorage.removeItem('khedma.roleSelectionSkipped'); location.reload(); return false;">إعادة التجربة</a>
                         <a href="#">من نحن</a>
@@ -3076,7 +3063,7 @@
                         <select id="workerSkills" class="input-field skills-select" multiple required>
                             <option value="نجار">نجار</option>
                             <option value="سباك">سباك</option>
-                            <option value="electrician">كهربائي</option>
+                            <option value="كهربائي">كهربائي</option>
                             <option value="عامل بناء">عامل بناء</option>
                             <option value="سائق">سائق</option>
                             <option value="حداد">حداد</option>
@@ -3101,7 +3088,13 @@
                             <option value="Rabat">الرباط</option>
                             <option value="Tangier">طنجة</option>
                             <option value="Marrakech">مراكش</option>
-                            <option value="Tangier">طنجة</option>
+                            <option value="Casablanca">الدار البيضاء</option>
+                            <option value="Fes">فاس</option>
+                            <option value="Agadir">أغادير</option>
+                            <option value="Meknes">مكناس</option>
+                            <option value="Oujda">وجدة</option>
+                            <option value="Kenitra">القنيطرة</option>
+                            <option value="Tetouan">تطوان</option>
                         </select>
                     </div>
                     <div class="auth-actions">
@@ -3195,7 +3188,12 @@
                                 <option value="Marrakech">مراكش</option>
                                 <option value="Rabat">الرباط</option>
                                 <option value="Casablanca">الدار البيضاء</option>
-                                <option value="Fez">فاس</option>
+                                <option value="Fes">فاس</option>
+                                <option value="Agadir">أغادير</option>
+                                <option value="Meknes">مكناس</option>
+                                <option value="Oujda">وجدة</option>
+                                <option value="Kenitra">القنيطرة</option>
+                                <option value="Tetouan">تطوان</option>
                             </select>
                         </div>
                         <div class="field-group">
@@ -3313,6 +3311,12 @@
                             <option value="Marrakech">مراكش</option>
                             <option value="Rabat">الرباط</option>
                             <option value="Casablanca">الدار البيضاء</option>
+                            <option value="Fes">فاس</option>
+                            <option value="Agadir">أغادير</option>
+                            <option value="Meknes">مكناس</option>
+                            <option value="Oujda">وجدة</option>
+                            <option value="Kenitra">القنيطرة</option>
+                            <option value="Tetouan">تطوان</option>
                         </select>
                         <button type="button" class="clear-filters-btn" id="workerClearFiltersBtn">إعادة التعيين</button>
                     </div>
@@ -3439,11 +3443,21 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="jobModal" onclick="handleJobModalOverlayClick(event)">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">تفاصيل الوظيفة</h2>
+                <button type="button" class="modal-close" onclick="closeJobModal()">×</button>
+            </div>
+            <div id="jobModalContent"></div>
+        </div>
+    </div>
+
     <button type="button" class="safety-tips-btn" onclick="openSafetyModal()" title="نصائح السلامة" style="display:none;">🛡️</button>
 
     <!-- Onboarding Welcome Screens -->
 <div class="onboarding-overlay" id="onboardingOverlay" onclick="handleOnboardingOverlayClick(event)">
-        <button type="button" class="onboarding-skip onboarding-skip-floating" onclick="skipOnboarding(event)" aria-label="تخطي onboarding">تخطي</button>
+        <button type="button" class="onboarding-skip onboarding-skip-floating" onclick="skipOnboarding(event)" aria-label="تخطي المقدمة">تخطي</button>
         <div class="onboarding-container">
             <div class="onboarding-progress">
                 <span class="onboarding-dot active" data-slide="0"></span>
@@ -3460,7 +3474,7 @@
             <div class="onboarding-slide" data-slide="1">
                 <div class="onboarding-icon">🛡️</div>
                 <h2 class="onboarding-title">تواصل مع موثوقين</h2>
-                <p class="onboarding-subtitle">تواصل مباشرة مع أصحاب عمل موثوقين عبر WhatsApp</p>
+                <p class="onboarding-subtitle">تواصل مباشرة مع أصحاب عمل موثوقين عبر واتساب</p>
             </div>
             
             <div class="onboarding-slide" data-slide="2">
@@ -3471,7 +3485,7 @@
             
             <div class="onboarding-nav">
                 <button type="button" class="onboarding-skip" onclick="skipOnboarding(event)">تخطي</button>
-                <button type="button" class="onboarding-next" onclick="nextOnboardingSlide()" id="onboardingNextBtn">Next</button>
+                <button type="button" class="onboarding-next" onclick="nextOnboardingSlide()" id="onboardingNextBtn">التالي</button>
             </div>
         </div>
     </div>
@@ -3525,7 +3539,7 @@
                         <option value="Tangier">طنجة</option>
                         <option value="Rabat">الرباط</option>
                         <option value="Marrakech">مراكش</option>
-                        <option value="Tangier">طنجة</option>
+                        <option value="Casablanca">الدار البيضاء</option>
                         <option value="Fes">فاس</option>
                         <option value="Agadir">أغادير</option>
                         <option value="Meknes">مكناس</option>
@@ -3619,6 +3633,10 @@
     </div>
 
     <script>
+        const SUPABASE_URL = "https://kuqoedttpxtaxvpldhsm.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt1cW9lZHR0cHh0YXh2cGxkaHNtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwNzE4OTYsImV4cCI6MjA5MDY0Nzg5Nn0.lpgX_xWoGDdDo3yCOT86mxlkIPv09uzpWNWdRSDDf9A";
+        const supabaseClient = createSupabaseClient();
+
         // Onboarding State
         const ONBOARDING_KEY = "khedma.onboardingComplete";
         const ROLE_SELECTION_SKIPPED_KEY = "khedma.roleSelectionSkipped";
@@ -3665,9 +3683,9 @@
             
             const nextBtn = document.querySelector('.onboarding-next');
             if (currentOnboardingSlide === 2) {
-                nextBtn.textContent = 'Start';
+                nextBtn.textContent = 'ابدأ';
             } else {
-                nextBtn.textContent = 'Next';
+                nextBtn.textContent = 'التالي';
             }
         }
         
@@ -3922,6 +3940,7 @@
                     role: 'employer',
                     name: profileData.name,
                     phone: profileData.phone,
+                    city: profileData.city || "",
                     company: ''
                 };
             } else {
@@ -3938,6 +3957,7 @@
             
             saveCurrentUser();
             persistCollections();
+            syncCurrentUserToSupabase(state.currentUser);
             
             // Show appropriate dashboard
             if (state.currentUser.role === 'employer') {
@@ -3964,6 +3984,174 @@
             ratings: "khedma.ratings",
             reports: "khedma.reports"
         };
+
+        let activeJobModalId = null;
+
+        function createSupabaseClient() {
+            if (!window.supabase || typeof window.supabase.createClient !== "function") {
+                return null;
+            }
+
+            try {
+                return window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+                    auth: {
+                        persistSession: false,
+                        autoRefreshToken: false,
+                        detectSessionInUrl: false
+                    }
+                });
+            } catch (error) {
+                console.warn("تعذر تهيئة Supabase:", error);
+                return null;
+            }
+        }
+
+        function normalizePhoneForWhatsApp(phone) {
+            const digits = String(phone || "").replace(/\D/g, "");
+            if (!digits) {
+                return "";
+            }
+            if (digits.startsWith("212")) {
+                return digits;
+            }
+            if (digits.startsWith("00212")) {
+                return digits.slice(2);
+            }
+            if (digits.startsWith("0") && digits.length === 10) {
+                return "212" + digits.slice(1);
+            }
+            return digits;
+        }
+
+        function buildWhatsAppUrl(phone, job) {
+            const normalizedPhone = normalizePhoneForWhatsApp(phone);
+            if (!normalizedPhone) {
+                return "";
+            }
+
+            const message = [
+                "السلام عليكم،",
+                "أنا مهتم بهذه الوظيفة على KHEDMA:",
+                job.title,
+                "في",
+                job.company
+            ].join(" ");
+
+            return "https://wa.me/" + normalizedPhone + "?text=" + encodeURIComponent(message);
+        }
+
+        function mapUserRoleToSupabase(role) {
+            return role === "employer" ? "client" : "worker";
+        }
+
+        function extractSalaryRange(salaryText, salaryNum) {
+            const matches = String(salaryText || "").match(/\d+/g) || [];
+            const numbers = matches.map(function(value) {
+                return parseInt(value, 10);
+            }).filter(Number.isFinite);
+
+            if (numbers.length >= 2) {
+                return {
+                    min: Math.min(numbers[0], numbers[1]),
+                    max: Math.max(numbers[0], numbers[1])
+                };
+            }
+
+            const fallback = Number.isFinite(salaryNum) ? salaryNum : (numbers[0] || 0);
+            return {
+                min: fallback,
+                max: fallback
+            };
+        }
+
+        function syncCurrentUserToSupabase(user) {
+            if (!supabaseClient || !user || !user.phone) {
+                return Promise.resolve(null);
+            }
+
+            const payload = {
+                phone: user.phone,
+                name: user.name || null,
+                role: mapUserRoleToSupabase(user.role),
+                skills: user.role === "worker" ? (user.skills || []) : null,
+                district: user.city || null
+            };
+
+            return supabaseClient
+                .from("users")
+                .upsert(payload, { onConflict: "phone" })
+                .select()
+                .single()
+                .then(function(result) {
+                    if (result.error) {
+                        throw result.error;
+                    }
+
+                    const remoteUser = result.data || null;
+                    if (
+                        remoteUser &&
+                        state.currentUser &&
+                        state.currentUser.phone === user.phone
+                    ) {
+                        state.currentUser.supabaseId = remoteUser.id;
+                        saveCurrentUser();
+                    }
+
+                    return remoteUser;
+                })
+                .catch(function(error) {
+                    console.warn("تعذر حفظ المستخدم في Supabase، سيتم الاعتماد على localStorage:", error);
+                    return null;
+                });
+        }
+
+        function syncJobToSupabase(job) {
+            if (!supabaseClient || !job || !state.currentUser || state.currentUser.role !== "employer") {
+                return Promise.resolve(null);
+            }
+
+            return syncCurrentUserToSupabase(state.currentUser).then(function(remoteUser) {
+                const clientId = (remoteUser && remoteUser.id) || state.currentUser.supabaseId || null;
+                if (!clientId) {
+                    return null;
+                }
+
+                const salaryRange = extractSalaryRange(job.salary, job.salaryNum);
+                const payload = {
+                    title: job.title,
+                    description: job.description,
+                    district: [formatCity(job.location), job.area].filter(Boolean).join(" - "),
+                    category: job.category || "عام",
+                    price_min: salaryRange.min,
+                    price_max: salaryRange.max,
+                    status: "open",
+                    client_id: clientId
+                };
+
+                return supabaseClient
+                    .from("jobs")
+                    .insert(payload)
+                    .select()
+                    .single()
+                    .then(function(result) {
+                        if (result.error) {
+                            throw result.error;
+                        }
+
+                        const remoteJob = result.data || null;
+                        if (remoteJob) {
+                            job.supabaseId = remoteJob.id;
+                            job.clientId = clientId;
+                            persistCollections();
+                        }
+                        return remoteJob;
+                    })
+                    .catch(function(error) {
+                        console.warn("تعذر حفظ الوظيفة في Supabase، سيتم الاعتماد على localStorage:", error);
+                        return null;
+                    });
+            });
+        }
 
         // Trust & Safety - User verification data (simulated)
         const userVerifications = {
@@ -4156,7 +4344,7 @@
         // Trust & Safety - Safety tips modal
         function openSafetyModal() {
             document.getElementById('safetyModal').classList.add('active');
-            document.body.classList.add('modal-close');
+            document.body.classList.add('modal-open');
         }
 
         function closeSafetyModal() {
@@ -4227,6 +4415,56 @@
             document.body.classList.remove('modal-open');
         }
 
+        function getJobById(jobId) {
+            return getAllJobs().find(function(item) {
+                return Number(item.id) === Number(jobId);
+            }) || null;
+        }
+
+        function handleJobModalOverlayClick(event) {
+            if (event.target === event.currentTarget) {
+                closeJobModal();
+            }
+        }
+
+        function openJobModal(jobId) {
+            const job = getJobById(jobId);
+            if (!job) {
+                return;
+            }
+
+            activeJobModalId = job.id;
+            const whatsappUrl = buildWhatsAppUrl(job.employerPhone || job.phone, job);
+            const actionMarkup = whatsappUrl
+                ? `<a class="whatsapp-btn" href="${whatsappUrl}" target="_blank" rel="noopener noreferrer">تواصل عبر واتساب</a>`
+                : `<button type="button" class="whatsapp-btn" disabled style="opacity:0.7;cursor:not-allowed;">رقم الهاتف غير متوفر</button>`;
+
+            document.querySelector("#jobModal .modal-title").textContent = job.title;
+            document.getElementById("jobModalContent").innerHTML = `
+                <p class="modal-company">${escapeHtml(job.company || "صاحب العمل")}</p>
+                <span class="modal-salary">${escapeHtml(job.salary || "غير محدد")}</span>
+                <div class="modal-highlights">
+                    <span class="location-tag">${formatLocation(job)}</span>
+                    <span class="location-tag">${escapeHtml(job.dateLabel || getDateLabel(job.date))}</span>
+                </div>
+                <div class="modal-section">
+                    <h4>تفاصيل الوظيفة</h4>
+                    <p>${escapeHtml(job.description || "لا يوجد وصف إضافي.")}</p>
+                </div>
+                ${actionMarkup}
+            `;
+
+            document.getElementById("jobModal").classList.add("active");
+            document.body.classList.add("modal-open");
+        }
+
+        function closeJobModal() {
+            activeJobModalId = null;
+            document.getElementById("jobModal").classList.remove("active");
+            document.querySelector("#jobModal .modal-title").textContent = "تفاصيل الوظيفة";
+            document.body.classList.remove("modal-open");
+        }
+
         // Trust & Safety - Get user ID from job
         function getUserIdFromJob(job) {
             return job.employerPhone || job.phone || 'default';
@@ -4240,7 +4478,7 @@
                 salary: "300-400 درهما/يوم",
                 salaryNum: 300,
                 location: "Rabat",
-                area: "Agdal",
+                area: "أكدال",
                 urgency: "urgent",
                 description: "نحتاج عامل بناء لديه خبرة في البناء والتشطيب للعمل في ورشة جديدة.",
                 date: "today",
@@ -4254,7 +4492,7 @@
                 salary: "4000-5000 درهما/شهر",
                 salaryNum: 4000,
                 location: "Tangier",
-                area: "Maarif",
+                area: "المعاريف",
                 urgency: "today",
                 description: "سائق يملك سيارة للعمل في توصيل الطلبات داخل المدينة.",
                 date: "today",
@@ -4268,7 +4506,7 @@
                 salary: "4500-6000 درهما/شهر",
                 salaryNum: 4500,
                 location: "Rabat",
-                area: "Hay Riad",
+                area: "حي الرياض",
                 urgency: "regular",
                 description: "نبحث عن نجار محترف للعمل في تصميم وتنفيذ الأثاث.",
                 date: "week",
@@ -4282,7 +4520,7 @@
                 salary: "350-500 درهما/يوم",
                 salaryNum: 350,
                 location: "Tangier",
-                area: "Sidi Maarouf",
+                area: "سيدي معروف",
                 urgency: "urgent",
                 description: "مطلوب سباك لصيانة دورية وإصلاحات منازل وشركات.",
                 date: "today",
@@ -4291,14 +4529,14 @@
             },
             {
                 id: 5,
-                title: "electrician",
+                title: "كهربائي",
                 company: "شركة الطاقة الذكية",
                 salary: "5000-7000 درهما/شهر",
                 salaryNum: 5000,
                 location: "Marrakech",
-                area: "Gueliz",
+                area: "كيليز",
                 urgency: "regular",
-                description: "نحتاج electrician بخبرة في في التركيبات الكهربائية المنزلية.",
+                description: "نحتاج كهربائي بخبرة في التركيبات الكهربائية المنزلية.",
                 date: "month",
                 dateLabel: "هذا الشهر",
                 phone: "212665678901"
@@ -4310,7 +4548,7 @@
                 salary: "2500-3200 درهما/شهر",
                 salaryNum: 2500,
                 location: "Tangier",
-                area: "Malabata",
+                area: "مالاباطا",
                 urgency: "today",
                 description: "عامل نظافة لعمارة سكنية في الفترة الصباحية.",
                 date: "week",
@@ -4324,7 +4562,7 @@
                 salary: "4200-5200 درهما/شهر",
                 salaryNum: 4200,
                 location: "Rabat",
-                area: "Hassan",
+                area: "حسان",
                 urgency: "regular",
                 description: "سائق لديه رخصة مناسبة وخبرة في التوصيل داخل المدن.",
                 date: "week",
@@ -4338,7 +4576,7 @@
                 salary: "3500-4800 درهما/شهر",
                 salaryNum: 3500,
                 location: "Tangier",
-                area: "Derb Sultan",
+                area: "درب السلطان",
                 urgency: "today",
                 description: "عامل بناء للعمل في مشروع سكني جديد لمدة ثلاثة أشهر.",
                 date: "today",
@@ -4351,7 +4589,13 @@
             Rabat: "الرباط",
             Tangier: "طنجة",
             Marrakech: "مراكش",
-            Tangier: "طنجة"
+            Casablanca: "الدار البيضاء",
+            Fes: "فاس",
+            Agadir: "أغادير",
+            Meknes: "مكناس",
+            Oujda: "وجدة",
+            Kenitra: "القنيطرة",
+            Tetouan: "تطوان"
         };
 
         const dateLabels = {
@@ -4490,9 +4734,15 @@
         function getLocationCoords(city, area, id) {
             const centers = {
                 Rabat: { x: 36, y: 41 },
-                Tangier: { x: 64, y: 57 },
+                Tangier: { x: 58, y: 24 },
                 Marrakech: { x: 49, y: 72 },
-                Tangier: { x: 58, y: 24 }
+                Casablanca: { x: 35, y: 49 },
+                Fes: { x: 51, y: 32 },
+                Agadir: { x: 32, y: 82 },
+                Meknes: { x: 47, y: 35 },
+                Oujda: { x: 78, y: 33 },
+                Kenitra: { x: 34, y: 37 },
+                Tetouan: { x: 60, y: 19 }
             };
 
             const center = centers[city] || { x: 50, y: 50 };
@@ -4773,7 +5023,7 @@
             const userId = getUserIdFromJob(job);
             const rating = getUserRating(userId);
 
-            return `<article class="job-card ${escapeHtml(job.urgency)}" style="--card-index:${index};">
+            return `<article class="job-card ${escapeHtml(job.urgency)}" style="--card-index:${index};" data-job-id="${Number(job.id)}" tabindex="0" role="button" aria-label="عرض تفاصيل الوظيفة: ${escapeHtml(job.title)}">
                 <div class="job-top">
                     <div>
                         <h3 class="job-title">${escapeHtml(job.title)}</h3>
@@ -4784,7 +5034,6 @@
                         </p>
                     </div>
                     <span class="job-salary">${escapeHtml(job.salary)}</span>
-                    <span class="insurance-badge">🛡️ مؤمّن</span>
                 </div>
                 <div class="job-meta">
                     <span class="meta-pill">${formatLocation(job)}</span>
@@ -4998,7 +5247,7 @@
                 <p class="applicant-meta">تاريخ التقديم: ${toArabicDate(application.appliedAt)}</p>
                 <div class="applicant-actions"><button type="button" class="small-btn" onclick="setApplicationStatus(${Number(application.id)}, 'accepted')" ${acceptDisabled}>قبول</button>
                     <button type="button" class="small-btn reject" onclick="setApplicationStatus(${Number(application.id)}, 'rejected')" ${rejectDisabled}>رفض</button>
-                    <button type="button" class="small-btn complete-btn" onclick="completeShift(\${Number(application.id)})" \${application.status === 'accepted' ? '' : 'disabled'}>إكمال الشيفت</button>
+                    <button type="button" class="small-btn complete-btn" onclick="completeShift(${Number(application.id)})" ${application.status === "accepted" ? "" : "disabled"}>إكمال الشيفت</button>
                 </div>
             </div>`;
         }
@@ -5027,7 +5276,6 @@
                         </p>
                     </div>
                     <span class="job-salary">${escapeHtml(job.salary)}</span>
-                    <span class="insurance-badge">🛡️ مؤمّن</span>
                 </div>
                 <div class="job-meta">
                     <span class="meta-pill">${formatLocation(job)}</span>
@@ -5141,12 +5389,6 @@
         function completeShift(appId) { setApplicationStatus(appId, "completed"); }
 
         function setApplicationStatus(applicationId, status) {
-        // Update analytics after status change
-        if (typeof updateEmployerAnalytics === "function") updateEmployerAnalytics();
-        if (typeof updateWorkerAnalytics === "function") updateWorkerAnalytics();
-        // Update analytics after status change
-        updateEmployerAnalytics();
-        updateWorkerAnalytics();
             if (!state.currentUser || state.currentUser.role !== "employer") {
                 return;
             }
@@ -5172,6 +5414,7 @@
             persistCollections();
             renderEmployerDashboard();
             updateEmployerAnalytics();
+            updateWorkerAnalytics();
         }
 
         function applyToJob(jobId) {
@@ -5244,6 +5487,8 @@
             };
 
             saveCurrentUser();
+            persistCollections();
+            syncCurrentUserToSupabase(state.currentUser);
             document.getElementById("employerRegisterForm").reset();
             showScreen("employerDashboard");
         }
@@ -5275,6 +5520,8 @@
             };
 
             saveCurrentUser();
+            persistCollections();
+            syncCurrentUserToSupabase(state.currentUser);
             document.getElementById("workerRegisterForm").reset();
             showScreen("workerDashboard");
         }
@@ -5289,12 +5536,13 @@
             const title = document.getElementById("jobTitle").value.trim();
             const salaryText = document.getElementById("jobSalaryText").value.trim();
             const salaryNum = parseInt(document.getElementById("jobSalaryNum").value, 10);
+            const category = document.getElementById("jobIndustry").value;
             const city = document.getElementById("jobCity").value;
             const area = document.getElementById("jobArea").value.trim();
             const date = document.getElementById("jobDate").value;
             const description = document.getElementById("jobDescription").value.trim();
 
-            if (!title || !salaryText || !Number.isFinite(salaryNum) || !city || !area || !date || !description) {
+            if (!title || !salaryText || !Number.isFinite(salaryNum) || !category || !city || !area || !date || !description) {
                 alert("يرجى إدخال كل بيانات الوظيفة بشكل صحيح.");
                 return;
             }
@@ -5308,6 +5556,7 @@
                 company: company,
                 salary: salaryText,
                 salaryNum: salaryNum,
+                category: category,
                 location: city,
                 area: area,
                 urgency: urgency,
@@ -5327,6 +5576,7 @@
             state.expandedJobId = newJob.id;
             renderEmployerDashboard();
             updateEmployerAnalytics();
+            syncJobToSupabase(newJob);
         }
 
         function bindEvents() {
@@ -5391,6 +5641,33 @@
             document.getElementById("workerDateFilter").addEventListener("change", renderWorkerJobs);
             document.getElementById("workerCityFilter").addEventListener("change", renderWorkerJobs);
             document.getElementById("workerClearFiltersBtn").addEventListener("click", clearWorkerFilters);
+
+            document.getElementById("workerJobsList").addEventListener("click", function(event) {
+                if (event.target.closest("button, a, .job-company")) {
+                    return;
+                }
+
+                const card = event.target.closest("[data-job-id]");
+                if (!card) {
+                    return;
+                }
+
+                openJobModal(card.dataset.jobId);
+            });
+
+            document.getElementById("workerJobsList").addEventListener("keydown", function(event) {
+                const card = event.target.closest("[data-job-id]");
+                if (!card || event.target !== card) {
+                    return;
+                }
+
+                if (event.key !== "Enter" && event.key !== " ") {
+                    return;
+                }
+
+                event.preventDefault();
+                openJobModal(card.dataset.jobId);
+            });
         }
 
         function restoreSession() {
@@ -5437,6 +5714,9 @@
         window.closeSafetyModal = closeSafetyModal;
         window.openProfileModal = openProfileModal;
         window.closeProfileModal = closeProfileModal;
+        window.openJobModal = openJobModal;
+        window.closeJobModal = closeJobModal;
+        window.handleJobModalOverlayClick = handleJobModalOverlayClick;
         window.submitRating = submitRating;
 
         bindEvents();
