@@ -1,42 +1,25 @@
-# sv
+# خدماتي — Khedma MVP
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A mobile-first Arabic job marketplace for Casablanca, Morocco.  
+Workers and employers connect via WhatsApp — no backend required.
 
-## Creating a project
+## Stack
+- Single `index.html` — no build step, no framework
+- All data stored in `localStorage`
+- Deployed on Vercel (auto-deploys on push to `master`)
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Features
+- Browse, search, and filter jobs by category / salary / date
+- Post a job (saved locally)
+- Apply via WhatsApp
+- Save jobs, set alerts, mark as urgent
+- Workers directory with skill filters
+- Earnings tracker
+- Onboarding flow (role selection + profile setup)
 
-```sh
-# create a new project
-npx sv create my-app
-```
+## Verify the live version
+Scroll to the bottom of the deployed page — a small grey label shows the build ID (e.g. `v7328ef3`).  
+This should match the latest commit on `master`.
 
-To recreate this project with the same configuration:
-
-```sh
-# recreate this project
-npx sv@0.12.7 create --template minimal --types ts --install npm khedma-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```sh
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+## Deploy
+Push to `master` → Vercel deploys automatically within ~60 seconds.
