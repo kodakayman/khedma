@@ -1501,13 +1501,18 @@
 </head>
 <body>
     <!-- Header -->
-    <header>
+    <header id="mainHeader">
         <div class="header-content">
             <div class="logo"><i class="fas fa-handshake"></i> خدماتي</div>
             <div class="header-stats"><span id="totalJobs">5</span> وظيفة</div>
         </div>
     </header>
-    
+
+    <!-- Tab title bar (shown on non-jobs tabs) -->
+    <div id="tabTitleBar" style="display:none; padding: 14px 16px 10px; font-size: 1.1rem; font-weight: 700; color: var(--text);">
+        <span id="tabTitleText"></span>
+    </div>
+
     <!-- Hero -->
     <div class="hero" id="heroSection">
         <h1>🛠️ ابحث عن أفضل العمال</h1>
@@ -2675,19 +2680,27 @@
             document.getElementById('jobsContainer').innerHTML = html;
         }
 
-        function toggleJobDiscoveryControls(show) {
+        const TAB_TITLES = { workers: '👷 العمال', saved: '❤️ المحفوظات', profile: '👤 ملفي', earnings: '💰 الأرباح' };
+
+        function toggleJobDiscoveryControls(show, tab) {
             const searchInput = document.getElementById('searchInput');
             const categoryFilters = document.getElementById('categoryFilters');
             const advancedControls = document.getElementById('advancedControls');
             const pullIndicator = document.getElementById('pullRefreshIndicator');
             const hero = document.getElementById('heroSection');
             const statsBar = document.getElementById('statsBar');
+            const mainHeader = document.getElementById('mainHeader');
+            const tabTitleBar = document.getElementById('tabTitleBar');
+            const tabTitleText = document.getElementById('tabTitleText');
 
             searchInput.style.display = show ? 'block' : 'none';
             categoryFilters.style.display = show ? 'flex' : 'none';
             advancedControls.classList.toggle('hidden', !show);
             if (hero) hero.style.display = show ? '' : 'none';
             if (statsBar) statsBar.style.display = show ? '' : 'none';
+            if (mainHeader) mainHeader.style.display = show ? '' : 'none';
+            if (tabTitleBar) tabTitleBar.style.display = show ? 'none' : 'block';
+            if (tabTitleText && tab) tabTitleText.textContent = TAB_TITLES[tab] || '';
 
             if (!show) {
                 pullIndicator.classList.remove('visible');
@@ -2702,7 +2715,7 @@
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             if (navItem) navItem.classList.add('active');
             currentTab = tab;
-            toggleJobDiscoveryControls(tab === 'jobs');
+            toggleJobDiscoveryControls(tab === 'jobs', tab);
             
             if (tab === 'jobs') renderJobs({ withLoading: true });
             else if (tab === 'workers') renderWorkers();
