@@ -1763,10 +1763,10 @@
                     <div class="skills-grid" id="skillsGrid">
                         <div class="skill-option" data-skill="بناء">بناء</div>
                         <div class="skill-option" data-skill="نجارة">نجارة</div>
-                        <div class="skill-option" data-skill="دهانات">دهانات</div>
+                        <div class="skill-option" data-skill="دهان">دهان</div>
                         <div class="skill-option" data-skill="كهرباء">كهرباء</div>
-                        <div class="skill-option" data-skill="نظافة">نظافة</div>
-                        <div class="skill-option" data-skill="طهي">طهي</div>
+                        <div class="skill-option" data-skill="تنظيف">تنظيف</div>
+                        <div class="skill-option" data-skill="طبخ">طبخ</div>
                         <div class="skill-option" data-skill="قيادة">قيادة</div>
                         <div class="skill-option" data-skill="حماية">حماية</div>
                         <div class="skill-option" data-skill="تبريد">تبريد وتكييف</div>
@@ -2474,9 +2474,9 @@
             // Add filter chips for workers at the top
             const uniqueSkills = [...new Set(workers.map(w => w.skill))];
             let skillsFilterHTML = '<div style="display:flex;gap:8px;padding:12px 16px;overflow-x:auto;flex-wrap:wrap;margin-bottom:8px;">';
-            skillsFilterHTML += `<span class="filter-chip active" onclick="filterWorkers('all', this)">الكل</span>`;
+            skillsFilterHTML += `<span class="filter-chip workers-filter-chip active" onclick="filterWorkers('all', this)">الكل</span>`;
             uniqueSkills.forEach(skill => {
-                skillsFilterHTML += `<span class="filter-chip" onclick="filterWorkers('${skill}', this)">${skill}</span>`;
+                skillsFilterHTML += `<span class="filter-chip workers-filter-chip" onclick="filterWorkers('${skill}', this)">${skill}</span>`;
             });
             skillsFilterHTML += '</div>';
             
@@ -2485,7 +2485,7 @@
             
             container.innerHTML = searchHTML + skillsFilterHTML + '<div class="workers-grid">' + workers.map(w => `
                 <div class="worker-card" onclick="contactWorker('${w.phone}','${w.name}')">
-                    <div class="worker-avatar">${w.name[0]}</div>
+                    <div class="worker-avatar">${(w.name || '?')[0]}</div>
                     <div class="worker-name">${w.name}</div>
                     <div class="worker-skill">${w.skill}</div>
                     <div class="worker-rating">⭐ ${w.rating}</div>
@@ -2502,7 +2502,7 @@
             if (grid) {
                 grid.innerHTML = filtered.map(w => `
                     <div class="worker-card" onclick="contactWorker('${w.phone}','${w.name}')">
-                        <div class="worker-avatar">${w.name[0]}</div>
+                        <div class="worker-avatar">${(w.name || '?')[0]}</div>
                         <div class="worker-name">${w.name}</div>
                         <div class="worker-skill">${w.skill}</div>
                         <div class="worker-rating">⭐ ${w.rating}</div>
@@ -2511,6 +2511,22 @@
             }
         }
         
+        function filterWorkers(skill, chipEl) {
+            document.querySelectorAll('.workers-filter-chip').forEach(c => c.classList.remove('active'));
+            if (chipEl) chipEl.classList.add('active');
+            const filtered = skill === 'all' ? workers : workers.filter(w => w.skill === skill);
+            const grid = document.querySelector('.workers-grid');
+            if (!grid) return;
+            grid.innerHTML = filtered.map(w => `
+                <div class="worker-card" onclick="contactWorker('${w.phone}','${w.name}')">
+                    <div class="worker-avatar">${(w.name || '?')[0]}</div>
+                    <div class="worker-name">${w.name}</div>
+                    <div class="worker-skill">${w.skill}</div>
+                    <div class="worker-rating">⭐ ${w.rating}</div>
+                </div>
+            `).join('');
+        }
+
         function renderSavedJobs() {
             const storageSnapshot = getStorageSnapshot();
             const saved = jobs.filter(j => storageSnapshot.savedJobs.has(j.id));
@@ -2599,6 +2615,8 @@
             `;
             
             document.getElementById('jobsContainer').innerHTML = html;
+        }
+
         // Earnings tab
         function applyToJob(jobId) {
             const job = jobs.find(j => j.id === jobId);
@@ -2655,8 +2673,7 @@
             `;
             document.getElementById('jobsContainer').innerHTML = html;
         }
-        }
-        
+
         function toggleJobDiscoveryControls(show) {
             const searchInput = document.getElementById('searchInput');
             const categoryFilters = document.getElementById('categoryFilters');
@@ -2888,7 +2905,7 @@
 
         function toggleSaveJob(id) {
             const enabled = toggleStoredId(STORAGE_KEYS.savedJobs, id);
-            showToast(enabled ? '❤️ Saved!' : '🗑️ Removed from saved');
+            showToast(enabled ? '❤️ تم الحفظ!' : '🗑️ تم الحذف من المحفوظات');
             refreshCurrentTab();
         }
 
@@ -2898,7 +2915,7 @@
                 alerts.push(id);
                 setStoredIds(STORAGE_KEYS.jobAlerts, alerts);
             }
-            showToast('🔔 Alerts enabled!');
+            showToast('🔔 تم تفعيل التنبيهات!');
             refreshCurrentTab();
         }
 
@@ -2915,9 +2932,9 @@
             const link = buildJobLink(id);
             const copied = await copyTextToClipboard(link);
             if (copied) {
-                showToast('📋 Link copied!');
+                showToast('📋 تم نسخ الرابط!');
             } else {
-                showToast('⚠️ Could not copy link');
+                showToast('⚠️ فشل نسخ الرابط');
             }
         }
 
@@ -2973,7 +2990,7 @@
         }
         
         function contactWorker(phone, name) {
-            const msg = 'مرحبا ' + name + '! أريد استفدام خدماتك';
+            const msg = 'مرحبا ' + name + '! أريد استخدام خدماتك';
             window.open('https://wa.me/' + phone.replace(/\s/g,'') + '?text=' + encodeURIComponent(msg), '_blank');
         }
         
