@@ -88,6 +88,7 @@
             border-radius: 24px;
             background: linear-gradient(135deg, #25D366 0%, #1FB65C 50%, #168A48 100%);
             box-shadow: 0 22px 44px rgba(24, 153, 77, 0.34);
+            transition: opacity 0.2s ease, transform 0.2s ease;
             position: relative;
             overflow: hidden;
             animation: enter-up 0.6s 0.05s ease both;
@@ -1508,13 +1509,13 @@
     </header>
     
     <!-- Hero -->
-    <div class="hero">
+    <div class="hero" id="heroSection">
         <h1>🛠️ ابحث عن أفضل العمال</h1>
         <p>تنظيف • سباكة • كهرباء • نقل أثاث • ودهان</p>
     </div>
-    
+
     <!-- Stats -->
-    <div class="stats-bar">
+    <div class="stats-bar" id="statsBar">
         <div class="stat-item"><div class="stat-value">24</div><div class="stat-label">وظيفة نشطة</div></div>
         <div class="stat-item"><div class="stat-value">156</div><div class="stat-label">عامل محترف</div></div>
         <div class="stat-item"><div class="stat-value">89%</div><div class="stat-label">نجاح</div></div>
@@ -2679,10 +2680,14 @@
             const categoryFilters = document.getElementById('categoryFilters');
             const advancedControls = document.getElementById('advancedControls');
             const pullIndicator = document.getElementById('pullRefreshIndicator');
+            const hero = document.getElementById('heroSection');
+            const statsBar = document.getElementById('statsBar');
 
             searchInput.style.display = show ? 'block' : 'none';
             categoryFilters.style.display = show ? 'flex' : 'none';
             advancedControls.classList.toggle('hidden', !show);
+            if (hero) hero.style.display = show ? '' : 'none';
+            if (statsBar) statsBar.style.display = show ? '' : 'none';
 
             if (!show) {
                 pullIndicator.classList.remove('visible');
