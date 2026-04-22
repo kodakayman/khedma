@@ -1,9 +1,0 @@
-{
-  "devDependencies": {
-    "drizzle-kit": "^0.31.10",
-    "prisma": "^7.6.0"
-  },
-  "dependencies": {
-    "drizzle-orm": "^0.45.2"
-  }
-}
