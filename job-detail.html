@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KHEDMA — تفاصيل الوظيفة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="app-header">
+    <a href="index.html" class="back-btn" aria-label="back"><i class="fas fa-arrow-left"></i></a>
+    <span class="logo" style="font-size:1rem;" id="page-title">KHEDMA</span>
+    <nav class="lang-toggle" aria-label="Language switcher">
+      <button class="lang-btn" data-lang="ar">AR</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="fr">FR</button>
+      <button class="lang-btn" data-lang="es">ES</button>
+      <button class="lang-btn" data-lang="darija">درجة</button>
+    </nav>
+  </header>
+
+  <!-- Content area -->
+  <div id="job-content">
+    <!-- Skeleton -->
+    <div id="job-skeleton">
+      <div class="detail-hero">
+        <div class="skeleton sk-line sk-short mb-12" style="height:48px;width:30%;"></div>
+        <div class="skeleton sk-line sk-wide" style="height:22px;"></div>
+        <div class="skeleton sk-line sk-short mt-8" style="height:14px;"></div>
+      </div>
+      <div class="detail-meta-grid">
+        <div class="skeleton-card"><div class="skeleton sk-line sk-full"></div><div class="skeleton sk-line sk-wide mt-8"></div></div>
+        <div class="skeleton-card"><div class="skeleton sk-line sk-full"></div><div class="skeleton sk-line sk-wide mt-8"></div></div>
+        <div class="skeleton-card"><div class="skeleton sk-line sk-full"></div><div class="skeleton sk-line sk-wide mt-8"></div></div>
+        <div class="skeleton-card"><div class="skeleton sk-line sk-full"></div><div class="skeleton sk-line sk-wide mt-8"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <a class="nav-item" href="index.html">
+      <i class="fas fa-briefcase"></i>
+      <span data-i18n="browseJobs">الوظائف</span>
+    </a>
+    <a class="nav-item" href="workers.html">
+      <i class="fas fa-users"></i>
+      <span data-i18n="workers">العمال</span>
+    </a>
+    <a class="nav-item" href="post-job.html">
+      <i class="fas fa-plus-circle"></i>
+      <span data-i18n="postJob">نشر</span>
+    </a>
+  </nav>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="js/shared.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', loadJobDetail);
+
+    async function loadJobDetail() {
+      const id = new URLSearchParams(window.location.search).get('id');
+      if (!id) { showNotFound(); return; }
+
+      let job = null;
+      try {
+        if (supabase) {
+          const { data, error } = await supabase
+            .from('jobs').select('*').eq('id', id).single();
+          if (error) throw error;
+          job = data;
+        } else {
+          const cached = LS.get('jobs_cache', []);
+          job = cached.find(j => String(j.id) === id) || null;
+        }
+      } catch {
+        const cached = LS.get('jobs_cache', []);
+        job = cached.find(j => String(j.id) === id) || null;
+      }
+
+      if (!job) { showNotFound(); return; }
+      renderJobDetail(job);
+    }
+
+    function renderJobDetail(job) {
+      const cat      = CONFIG.CATEGORIES.find(c => c.id === job.category);
+      const catLabel = cat ? (cat[currentLang] || cat.ar) : job.category;
+      const catIcon  = cat ? cat.icon : '💼';
+      const district = districtLabel(job.district);
+      const posted   = job.created_at ? timeAgo(job.created_at) : '';
+      const waLink   = whatsappJobLink(job.poster_phone, job.title);
+
+      document.getElementById('page-title').textContent = job.title;
+      document.title = `KHEDMA — ${job.title}`;
+
+      document.getElementById('job-content').innerHTML = `
+        <!-- Pay + Title hero -->
+        <div class="detail-hero">
+          <div class="detail-pay">${job.pay}</div>
+          <div class="detail-pay-unit">${t('perHour')}${job.duration_hours ? ' · ' + job.duration_hours + ' ' + t('hours') : ''}</div>
+          <div class="detail-title mt-12">${escapeHtml(job.title)}</div>
+          <div class="job-meta mt-8">
+            <span class="meta-pill cat">${catIcon} ${escapeHtml(catLabel)}</span>
+            <span class="meta-pill">📍 ${escapeHtml(district)}</span>
+          </div>
+        </div>
+
+        <!-- Meta grid -->
+        <div class="detail-meta-grid">
+          ${job.date ? `
+          <div class="detail-meta-item">
+            <div class="detail-meta-label">${t('date')}</div>
+            <div class="detail-meta-value">📅 ${formatDate(job.date)}</div>
+          </div>` : ''}
+          ${job.start_time ? `
+          <div class="detail-meta-item">
+            <div class="detail-meta-label">${t('startTime')}</div>
+            <div class="detail-meta-value">🕐 ${job.start_time.slice(0,5)}</div>
+          </div>` : ''}
+          ${job.duration_hours ? `
+          <div class="detail-meta-item">
+            <div class="detail-meta-label">${t('duration')}</div>
+            <div class="detail-meta-value">⏱ ${job.duration_hours} ${t('hours')}</div>
+          </div>` : ''}
+          <div class="detail-meta-item">
+            <div class="detail-meta-label">${t('district')}</div>
+            <div class="detail-meta-value">📍 ${escapeHtml(district)}</div>
+          </div>
+          <div class="detail-meta-item">
+            <div class="detail-meta-label">${t('postedAt')}</div>
+            <div class="detail-meta-value">${posted}</div>
+          </div>
+        </div>
+
+        <!-- Description -->
+        ${job.description ? `
+        <div class="detail-section">
+          <h3 class="section-title mb-12" data-i18n="description">${t('description')}</h3>
+          <p style="font-size:.9rem;line-height:1.7;color:var(--text-muted);">${escapeHtml(job.description)}</p>
+        </div>` : ''}
+
+        <!-- Sticky WhatsApp apply bar -->
+        <div class="apply-bar">
+          <a href="${waLink}" target="_blank" rel="noopener" class="btn btn-whatsapp">
+            <i class="fab fa-whatsapp" style="font-size:1.2rem;"></i>
+            <span data-i18n="apply">${t('apply')}</span>
+          </a>
+        </div>
+
+        <div style="height:100px;"></div>
+      `;
+    }
+
+    function showNotFound() {
+      document.getElementById('job-content').innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">🔍</div>
+          <h3 data-i18n="jobNotFound">${t('jobNotFound')}</h3>
+          <a href="index.html" class="btn btn-primary mt-16" data-i18n="browseJobs">${t('browseJobs')}</a>
+        </div>`;
+    }
+  </script>
+</body>
+</html>

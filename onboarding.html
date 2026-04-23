@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KHEDMA — مرحباً</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body style="padding-bottom:0;">
+
+  <div class="onboarding-page">
+
+    <!-- Lang toggle at the top -->
+    <nav class="lang-toggle" style="margin-bottom:24px;" aria-label="Language switcher">
+      <button class="lang-btn" data-lang="ar">AR</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="fr">FR</button>
+      <button class="lang-btn" data-lang="es">ES</button>
+      <button class="lang-btn" data-lang="darija">درجة</button>
+    </nav>
+
+    <div class="onboarding-logo">KHEDMA</div>
+    <p class="onboarding-tagline" data-i18n="tagline">خدمة قريبة منك في طنجة</p>
+
+    <p style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:0;" data-i18n="selectRole">
+      كيف ستستخدم KHEDMA؟
+    </p>
+
+    <div class="role-cards">
+      <div class="role-card" id="role-worker" onclick="selectRole('worker')">
+        <div class="role-icon">💼</div>
+        <div class="role-label" data-i18n="roleWorker">أبحث عن عمل</div>
+      </div>
+      <div class="role-card" id="role-employer" onclick="selectRole('employer')">
+        <div class="role-icon">🏢</div>
+        <div class="role-label" data-i18n="roleEmployer">أبحث عن عمال</div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" id="continue-btn" onclick="finish()" style="width:100%;max-width:320px;" disabled>
+      <span data-i18n="continue">متابعة</span>
+    </button>
+
+    <button class="skip-link" onclick="finish()" style="margin-top:14px;" data-i18n="skip">تخطي</button>
+
+  </div>
+
+  <script src="js/shared.js"></script>
+  <script>
+    /* Skip if already onboarded */
+    if (localStorage.getItem('khedma_onboarded')) {
+      window.location.replace('index.html');
+    }
+
+    let selectedRole = null;
+
+    function selectRole(role) {
+      selectedRole = role;
+      document.getElementById('role-worker').classList.toggle('active',   role === 'worker');
+      document.getElementById('role-employer').classList.toggle('active', role === 'employer');
+      document.getElementById('continue-btn').disabled = false;
+    }
+
+    function finish() {
+      localStorage.setItem('khedma_onboarded', '1');
+      if (selectedRole) localStorage.setItem('khedma_role', selectedRole);
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KHEDMA — العمال</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="app-header">
+    <span class="logo">KHEDMA</span>
+    <nav class="lang-toggle" aria-label="Language switcher">
+      <button class="lang-btn" data-lang="ar">AR</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="fr">FR</button>
+      <button class="lang-btn" data-lang="es">ES</button>
+      <button class="lang-btn" data-lang="darija">درجة</button>
+    </nav>
+  </header>
+
+  <!-- Search -->
+  <div class="page-wrap mt-12 mb-12">
+    <div class="search-wrap">
+      <i class="fas fa-search search-icon"></i>
+      <input
+        type="search"
+        class="search-input"
+        data-i18n-ph="searchWorkers"
+        placeholder="ابحث عن عامل..."
+        oninput="handleWorkerSearch(this.value)"
+        autocomplete="off"
+      >
+    </div>
+  </div>
+
+  <!-- Skill filter chips (built dynamically from loaded data) -->
+  <div class="filter-bar mb-16" id="worker-filter-bar">
+    <!-- populated by workers.js after loadWorkers() -->
+  </div>
+
+  <!-- Workers list -->
+  <div class="page-wrap">
+    <div id="workers-list" class="list"></div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <a class="nav-item" href="index.html">
+      <i class="fas fa-briefcase"></i>
+      <span data-i18n="browseJobs">الوظائف</span>
+    </a>
+    <a class="nav-item active" href="workers.html">
+      <i class="fas fa-users"></i>
+      <span data-i18n="workers">العمال</span>
+    </a>
+    <a class="nav-item" href="post-job.html">
+      <i class="fas fa-plus-circle"></i>
+      <span data-i18n="postJob">نشر</span>
+    </a>
+  </nav>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="js/shared.js"></script>
+  <script src="js/workers.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', loadWorkers);
+  </script>
+</body>
+</html>

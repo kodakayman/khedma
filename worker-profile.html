@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KHEDMA — ملف العامل</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="app-header">
+    <a href="workers.html" class="back-btn" aria-label="back"><i class="fas fa-arrow-left"></i></a>
+    <span class="logo" style="font-size:1rem;" id="page-title">KHEDMA</span>
+    <nav class="lang-toggle" aria-label="Language switcher">
+      <button class="lang-btn" data-lang="ar">AR</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="fr">FR</button>
+      <button class="lang-btn" data-lang="es">ES</button>
+      <button class="lang-btn" data-lang="darija">درجة</button>
+    </nav>
+  </header>
+
+  <!-- Content -->
+  <div id="worker-content">
+    <!-- Skeleton -->
+    <div class="profile-hero">
+      <div class="skeleton" style="width:80px;height:80px;border-radius:50%;"></div>
+      <div class="skeleton sk-line sk-wide mt-12" style="height:20px;"></div>
+      <div class="skeleton sk-line sk-short mt-8" style="height:14px;"></div>
+    </div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <a class="nav-item" href="index.html">
+      <i class="fas fa-briefcase"></i>
+      <span data-i18n="browseJobs">الوظائف</span>
+    </a>
+    <a class="nav-item active" href="workers.html">
+      <i class="fas fa-users"></i>
+      <span data-i18n="workers">العمال</span>
+    </a>
+    <a class="nav-item" href="post-job.html">
+      <i class="fas fa-plus-circle"></i>
+      <span data-i18n="postJob">نشر</span>
+    </a>
+  </nav>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="js/shared.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', loadWorkerProfile);
+
+    async function loadWorkerProfile() {
+      const id = new URLSearchParams(window.location.search).get('id');
+      if (!id) { showNotFound(); return; }
+
+      let worker = null;
+      try {
+        if (supabase) {
+          const { data, error } = await supabase
+            .from('workers').select('*').eq('id', id).single();
+          if (error) throw error;
+          worker = data;
+        } else {
+          const cached = LS.get('workers_cache', []);
+          worker = cached.find(w => String(w.id) === id) || null;
+        }
+      } catch {
+        const cached = LS.get('workers_cache', []);
+        worker = cached.find(w => String(w.id) === id) || null;
+      }
+
+      if (!worker) { showNotFound(); return; }
+      renderWorkerProfile(worker);
+    }
+
+    function renderWorkerProfile(w) {
+      const initial  = ((w.name || '?')[0]).toUpperCase();
+      const district = districtLabel(w.district);
+      const skill    = `${categoryIcon(w.skill)} ${categoryLabel(w.skill)}`;
+      const waLink   = whatsappWorkerLink(w.phone, w.name);
+      const joined   = w.created_at ? formatDate(w.created_at) : '';
+
+      document.getElementById('page-title').textContent = w.name || 'KHEDMA';
+      document.title = `KHEDMA — ${w.name || ''}`;
+
+      document.getElementById('worker-content').innerHTML = `
+        <!-- Profile hero -->
+        <div class="profile-hero">
+          <div class="profile-avatar-lg">${initial}</div>
+          <div class="profile-name-lg">${escapeHtml(w.name || '')}</div>
+          <div class="profile-skill">${escapeHtml(skill)}</div>
+          ${district ? `<div class="profile-dist">📍 ${escapeHtml(district)}</div>` : ''}
+          ${joined ? `<div class="text-muted text-sm mt-8">${t('postedAt')} ${joined}</div>` : ''}
+        </div>
+
+        <!-- Bio -->
+        ${w.bio ? `
+        <div class="detail-section mt-16">
+          <p style="font-size:.9rem;line-height:1.7;color:var(--text-muted);">${escapeHtml(w.bio)}</p>
+        </div>` : ''}
+
+        <!-- Sticky WhatsApp contact bar -->
+        <div class="apply-bar mt-20">
+          <a href="${waLink}" target="_blank" rel="noopener" class="btn btn-whatsapp">
+            <i class="fab fa-whatsapp" style="font-size:1.2rem;"></i>
+            <span data-i18n="contactWorker">${t('contactWorker')}</span>
+          </a>
+        </div>
+
+        <div style="height:100px;"></div>
+      `;
+    }
+
+    function showNotFound() {
+      document.getElementById('worker-content').innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">👷</div>
+          <h3 data-i18n="workerNotFound">${t('workerNotFound')}</h3>
+          <a href="workers.html" class="btn btn-primary mt-16" data-i18n="workers">${t('workers')}</a>
+        </div>`;
+    }
+  </script>
+</body>
+</html>

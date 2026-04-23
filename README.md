@@ -1,64 +1,144 @@
-# خدماتي — Khedma
+# KHEDMA
 
-> A mobile-first Arabic job marketplace connecting workers and employers across Moroccan cities via WhatsApp.
+> Hyperlocal WhatsApp-first job marketplace for Tangier, Morocco.
+> Inspired by Temper.jobs — stripped down for an Arabic-speaking MVP.
 
----
-
-## What is Khedma?
-
-Khedma is a lightweight, no-login service marketplace built for Morocco. Workers looking for daily jobs (cleaning, plumbing, electrical, moving, painting, etc.) and employers who need them can find each other instantly — no account required, contact happens directly over WhatsApp.
+**Tagline:** خدمة قريبة منك في طنجة
 
 ---
 
-## Who is it for?
+## Pages
 
-| Role | What they do |
-|------|-------------|
-| **Employer** | Posts a job with description, location, and price range |
-| **Worker** | Browses jobs, filters by skill/city, applies via WhatsApp |
-
----
-
-## Features
-
-### For Workers
-- Browse all available jobs with real-time filtering
-- Search by title, description, or neighbourhood
-- Filter by category (cleaning, plumbing, electrical, moving, painting, cooling, carpentry…)
-- Filter by salary range and date posted
-- Save jobs to favourites
-- Set alerts on jobs they're interested in
-- Mark jobs as urgent
-- Apply to a job directly via WhatsApp with one tap
-- Track earnings and payment history
-- Personal profile with skills, city, and bio
-
-### For Employers
-- Post a job in seconds (title, category, description, location, price range)
-- Browse a directory of available workers filtered by skill
-- Contact any worker directly via WhatsApp
-
-### General
-- Onboarding flow — choose role (worker or employer), set up profile
-- Pull-to-refresh on the jobs list
-- Fully Arabic (RTL) UI
-- Works offline (data stored in localStorage)
-- No sign-up, no backend, no app store
+| Page | URL | Purpose |
+|---|---|---|
+| `index.html` | `/` | Browse jobs (homepage) |
+| `post-job.html` | `/post-job` | Post a shift/job |
+| `job-detail.html` | `/job-detail?id=<uuid>` | Single job + WhatsApp apply |
+| `workers.html` | `/workers` | Browse worker profiles |
+| `worker-profile.html` | `/worker-profile?id=<uuid>` | Single worker + WhatsApp contact |
+| `onboarding.html` | `/onboarding` | First-visit role picker (skippable) |
 
 ---
 
-## Cities Supported
-Casablanca (الدار البيضاء) — with neighbourhoods including الحي الحسني, الماركيه, عين السبع, بوسكورة
+## Run Locally
+
+No build step. Open directly in a browser:
+
+```bash
+# Option 1 — Python simple server (recommended)
+cd khedma
+python3 -m http.server 8080
+# open http://localhost:8080
+
+# Option 2 — Node http-server
+npx http-server -p 8080
+# open http://localhost:8080
+
+# Option 3 — VS Code Live Server extension
+# Right-click index.html → "Open with Live Server"
+```
+
+> **Note:** Opening `index.html` directly via `file://` will work for most features,
+> but Supabase and font loading require a proper HTTP server.
 
 ---
 
-## Tech
-- Pure HTML/CSS/JS — single `index.html`, no build step, no framework
-- `localStorage` for all data persistence
-- WhatsApp deep links (`wa.me`) for all contact
-- Hosted on Vercel (auto-deploys on push to `master`)
+## Connect Supabase
+
+1. Create a project at [supabase.com](https://supabase.com)
+2. Run `supabase-setup.sql` in your project's **SQL Editor**
+3. Copy your **Project URL** and **anon public key** from Settings → API
+4. Add them as environment variables (see below)
+
+---
+
+## Environment Variables
+
+Set these in Vercel (or on `window` before `shared.js` loads for local dev):
+
+| Variable | Where to find it |
+|---|---|
+| `SUPABASE_URL` | Supabase Dashboard → Settings → API → Project URL |
+| `SUPABASE_ANON_KEY` | Supabase Dashboard → Settings → API → anon public key |
+
+### Vercel
+```
+Settings → Environment Variables → Add:
+  SUPABASE_URL        = https://xxxxxxxxxxxx.supabase.co
+  SUPABASE_ANON_KEY   = eyJhbGci...
+```
+
+Then add this to each HTML page's `<head>` (or a `config.js` loaded before `shared.js`):
+```html
+<script>
+  window._SUPABASE_URL  = '%%SUPABASE_URL%%';   // injected by Vercel
+  window._SUPABASE_ANON = '%%SUPABASE_ANON_KEY%%';
+</script>
+```
+
+> Until Supabase is connected the app falls back to `localStorage` cache —
+> jobs posted via `post-job.html` are stored locally and visible on the device.
+
+---
+
+## Deploy
+
+Push to `master` → Vercel auto-deploys in ~60 seconds.
+
+```bash
+git add -A
+git commit -m "your message"
+git push origin master
+```
+
+---
+
+## Tech Stack
+
+- **Vanilla HTML/CSS/JS** — no framework, no build step
+- **Supabase** — Postgres database, Row Level Security, Realtime
+- **WhatsApp deep links** — `wa.me/<phone>?text=<prefilled>`
+- **Vercel** — static hosting, auto-deploy from `master`
+
+---
+
+## Languages
+
+Full i18n system with 5 languages. Toggle in every page header persists to `localStorage`.
+
+| Code | Language | Status |
+|---|---|---|
+| `ar` | Arabic (العربية) | ✅ Complete |
+| `darija` | Moroccan Darija (الدارجة) | ✅ Complete |
+| `fr` | French | ✅ Complete |
+| `en` | English | ✅ Complete |
+| `es` | Spanish | ✅ Complete |
+
+RTL layout applies automatically for `ar` and `darija`.
+
+---
+
+## Adding Districts or Categories
+
+Edit `js/shared.js` — the two config arrays at the top:
+
+```js
+CONFIG.DISTRICTS = [
+  { id: 'new-district', ar: 'اسم عربي', fr: 'Nom', en: 'Name', es: 'Nombre', darija: 'اسم' },
+  // ...
+];
+
+CONFIG.CATEGORIES = [
+  { id: 'new-cat', ar: 'فئة', fr: 'Catégorie', en: 'Category', es: 'Categoría', darija: 'نوع', icon: '🔧' },
+  // ...
+];
+```
+
+All dropdowns, filter chips, and labels update automatically.
 
 ---
 
 ## Verify Live Version
-Scroll to the bottom of the deployed page — a small label shows the build ID matching the latest `master` commit.
+
+Scroll to the bottom of any deployed page — a small grey label shows the build commit ID.
+If it matches the latest commit on `master`, you're on the current version.

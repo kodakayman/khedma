@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KHEDMA — نشر وظيفة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="app-header">
+    <a href="index.html" class="back-btn" aria-label="back"><i class="fas fa-arrow-left"></i></a>
+    <span class="logo" style="font-size:1.1rem;" data-i18n="postJob">نشر وظيفة</span>
+    <nav class="lang-toggle" aria-label="Language switcher">
+      <button class="lang-btn" data-lang="ar">AR</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="fr">FR</button>
+      <button class="lang-btn" data-lang="es">ES</button>
+      <button class="lang-btn" data-lang="darija">درجة</button>
+    </nav>
+  </header>
+
+  <!-- Form -->
+  <div class="page-wrap mt-16">
+    <form id="post-job-form" class="form-section" onsubmit="submitJob(event)" novalidate>
+
+      <!-- Title -->
+      <div class="form-group">
+        <label class="form-label" for="jobTitle" data-i18n="jobTitle">العنوان</label>
+        <input
+          type="text"
+          id="jobTitle"
+          class="form-input"
+          data-i18n-ph="titlePlaceholder"
+          placeholder="مثال: نادل لكافيه نهاية الأسبوع"
+          required
+          maxlength="100"
+        >
+      </div>
+
+      <!-- Category + District row -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="jobCategory" data-i18n="category">الفئة</label>
+          <select id="jobCategory" class="form-select" data-category-select required></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="jobDistrict" data-i18n="district">المنطقة</label>
+          <select id="jobDistrict" class="form-select" data-district-select required></select>
+        </div>
+      </div>
+
+      <!-- Date + Start time row -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="jobDate" data-i18n="date">التاريخ</label>
+          <input type="date" id="jobDate" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="jobStartTime" data-i18n="startTime">وقت البدء</label>
+          <input type="time" id="jobStartTime" class="form-input">
+        </div>
+      </div>
+
+      <!-- Duration + Pay row -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="jobDuration" data-i18n="duration">المدة (ساعات)</label>
+          <input
+            type="number"
+            id="jobDuration"
+            class="form-input"
+            placeholder="8"
+            min="1" max="24" step="0.5"
+          >
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="jobPay" data-i18n="pay">الأجر (درهم)</label>
+          <input
+            type="number"
+            id="jobPay"
+            class="form-input"
+            placeholder="200"
+            min="1"
+            required
+          >
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="form-group">
+        <label class="form-label" for="jobDesc" data-i18n="description">الوصف</label>
+        <textarea
+          id="jobDesc"
+          class="form-textarea"
+          data-i18n-ph="descPlaceholder"
+          placeholder="اشرح المهمة والمتطلبات..."
+          rows="4"
+        ></textarea>
+      </div>
+
+      <!-- WhatsApp phone -->
+      <div class="form-group">
+        <label class="form-label" for="jobPhone" data-i18n="yourPhone">رقم واتساب الخاص بك</label>
+        <input
+          type="tel"
+          id="jobPhone"
+          class="form-input"
+          data-i18n-ph="phoneHint"
+          placeholder="مثال: +212 6XX XXX XXX"
+          required
+        >
+        <span class="form-hint" data-i18n="phoneHint">مثال: +212 6XX XXX XXX</span>
+      </div>
+
+      <!-- Referral code (optional) -->
+      <div class="form-group">
+        <label class="form-label" for="jobReferral">
+          <span data-i18n="referralCode">كود الإحالة</span>
+          <span class="optional-tag" data-i18n="optional"> — اختياري</span>
+        </label>
+        <input
+          type="text"
+          id="jobReferral"
+          class="form-input"
+          placeholder="REF-xxx"
+          maxlength="50"
+        >
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" class="btn btn-primary btn-full" id="submit-btn">
+        <i class="fas fa-paper-plane"></i>
+        <span data-i18n="submit">نشر الإعلان</span>
+      </button>
+
+    </form>
+    <div style="height:24px;"></div>
+  </div>
+
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="js/shared.js"></script>
+  <script>
+    /* Populate selects on load */
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('jobCategory').innerHTML = buildCategoryOptions();
+      document.getElementById('jobDistrict').innerHTML = buildDistrictOptions();
+
+      /* Set minimum date to today */
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('jobDate').min = today;
+      document.getElementById('jobDate').value = today;
+    });
+
+    async function submitJob(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submit-btn');
+
+      const title    = document.getElementById('jobTitle').value.trim();
+      const category = document.getElementById('jobCategory').value;
+      const district = document.getElementById('jobDistrict').value;
+      const date     = document.getElementById('jobDate').value;
+      const startTime= document.getElementById('jobStartTime').value || null;
+      const duration = parseFloat(document.getElementById('jobDuration').value) || null;
+      const pay      = parseInt(document.getElementById('jobPay').value, 10);
+      const desc     = document.getElementById('jobDesc').value.trim();
+      const phone    = document.getElementById('jobPhone').value.trim();
+      const referral = document.getElementById('jobReferral').value.trim() || null;
+
+      if (!title || !category || !district || !pay || !phone) {
+        showToast('⚠️ ' + (isRTL() ? 'يرجى تعبئة جميع الحقول المطلوبة' : 'Please fill all required fields'));
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> <span data-i18n="loading">${t('loading')}</span>`;
+
+      const job = {
+        title,
+        category,
+        district,
+        date,
+        start_time: startTime,
+        duration_hours: duration,
+        pay,
+        description: desc || null,
+        poster_phone: phone,
+        referral_code: referral,
+        is_active: true,
+      };
+
+      try {
+        if (supabase) {
+          const { error } = await supabase.from('jobs').insert([job]);
+          if (error) throw error;
+        } else {
+          /* No Supabase yet — save to localStorage cache */
+          const cached = LS.get('jobs_cache', []);
+          job.id = 'local-' + Date.now();
+          job.created_at = new Date().toISOString();
+          cached.unshift(job);
+          LS.set('jobs_cache', cached);
+        }
+        showToast(t('postSuccess'));
+        setTimeout(() => window.location.href = 'index.html', 1000);
+      } catch (err) {
+        console.error('submitJob:', err);
+        showToast(t('postError'));
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fas fa-paper-plane"></i> <span>${t('submit')}</span>`;
+      }
+    }
+  </script>
+</body>
+</html>
